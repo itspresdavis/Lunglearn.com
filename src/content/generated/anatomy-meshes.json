@@ -1,0 +1,1302 @@
+{
+  "file": "/anatomy/adult-male-thoracic.glb",
+  "sex": "male",
+  "label": "Adult male thoracic and airway reference",
+  "source": "BodyParts3D 4.0 IS-A, 99% polygon reduction",
+  "license": "CC BY 4.0",
+  "attribution": "BodyParts3D, \u00a9 The Database Center for Life Science licensed under CC Attribution 4.0 International",
+  "triangles": 325415,
+  "structures": 74,
+  "bytes": 8041132,
+  "centerOffsetMeters": [
+    -0.0020269630929786527,
+    1.2277057859395726,
+    -0.08354454568542373
+  ],
+  "anteriorZSign": -1,
+  "patientLeftXSign": 1,
+  "axes": {
+    "x": "left-right after centering (sagittal clip)",
+    "y": "inferior-superior (transverse clip)",
+    "z": "anterior-posterior (coronal clip)",
+    "anterior": "-z",
+    "patientLeft": "+x"
+  },
+  "meshes": [
+    {
+      "id": "fma-7487",
+      "fma": "FMA7487",
+      "name": "Body of sternum",
+      "sourceName": "body of sternum",
+      "mesh": "FMA7487",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 4646,
+      "sourceTriangles": 4646,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-9465",
+      "fma": "FMA9465",
+      "name": "Cavity of left atrium",
+      "sourceName": "cavity of left atrium",
+      "mesh": "FMA9465",
+      "layers": [
+        "cardiovascular"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 1064,
+      "sourceTriangles": 1064,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-9466",
+      "fma": "FMA9466",
+      "name": "Cavity of left ventricle",
+      "sourceName": "cavity of left ventricle",
+      "mesh": "FMA9466",
+      "layers": [
+        "cardiovascular"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 1722,
+      "sourceTriangles": 1722,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-11359",
+      "fma": "FMA11359",
+      "name": "Cavity of right atrium",
+      "sourceName": "cavity of right atrium",
+      "mesh": "FMA11359",
+      "layers": [
+        "cardiovascular"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 2244,
+      "sourceTriangles": 2244,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-9291",
+      "fma": "FMA9291",
+      "name": "Cavity of right ventricle",
+      "sourceName": "cavity of right ventricle",
+      "mesh": "FMA9291",
+      "layers": [
+        "cardiovascular"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 1918,
+      "sourceTriangles": 1918,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-9615",
+      "fma": "FMA9615",
+      "name": "Cricoid cartilage",
+      "sourceName": "cricoid cartilage",
+      "mesh": "FMA9615",
+      "layers": [
+        "respiratory",
+        "cartilage"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 3404,
+      "sourceTriangles": 3404,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-13295",
+      "fma": "FMA13295",
+      "name": "Diaphragm",
+      "sourceName": "diaphragm",
+      "mesh": "FMA13295",
+      "layers": [
+        "respiratory",
+        "muscular"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 2,
+      "triangles": 16296,
+      "sourceTriangles": 68522,
+      "clusterMillimeters": 5.0,
+      "uberon": null
+    },
+    {
+      "id": "fma-55130",
+      "fma": "FMA55130",
+      "name": "Epiglottis",
+      "sourceName": "epiglottis",
+      "mesh": "FMA55130",
+      "layers": [
+        "respiratory",
+        "cartilage"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 3602,
+      "sourceTriangles": 3602,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7131",
+      "fma": "FMA7131",
+      "name": "Esophagus",
+      "sourceName": "esophagus",
+      "mesh": "FMA7131",
+      "layers": [
+        "digestive"
+      ],
+      "system": "digestive",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 578,
+      "sourceTriangles": 578,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-9756",
+      "fma": "FMA9756",
+      "name": "External intercostal muscle",
+      "sourceName": "external intercostal muscle",
+      "mesh": "FMA9756",
+      "layers": [
+        "muscular"
+      ],
+      "system": "muscular",
+      "sex": "male",
+      "depth": 1,
+      "triangles": 18932,
+      "sourceTriangles": 197856,
+      "clusterMillimeters": 5.0,
+      "uberon": null
+    },
+    {
+      "id": "fma-68227",
+      "fma": "FMA68227",
+      "name": "Inferior lingular bronchial tree",
+      "sourceName": "inferior lingular bronchial tree",
+      "mesh": "FMA68227",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1348,
+      "sourceTriangles": 1348,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-9757",
+      "fma": "FMA9757",
+      "name": "Internal intercostal muscle",
+      "sourceName": "internal intercostal muscle",
+      "mesh": "FMA9757",
+      "layers": [
+        "muscular"
+      ],
+      "system": "muscular",
+      "sex": "male",
+      "depth": 1,
+      "triangles": 15581,
+      "sourceTriangles": 179676,
+      "clusterMillimeters": 5.0,
+      "uberon": null
+    },
+    {
+      "id": "fma-68231",
+      "fma": "FMA68231",
+      "name": "Left anterior basal segmental bronchial tree",
+      "sourceName": "left anterior basal segmental bronchial tree",
+      "mesh": "FMA68231",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 732,
+      "sourceTriangles": 732,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68222",
+      "fma": "FMA68222",
+      "name": "Left anterior segmental bronchial tree",
+      "sourceName": "left anterior segmental bronchial tree",
+      "mesh": "FMA68222",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1626,
+      "sourceTriangles": 1626,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68223",
+      "fma": "FMA68223",
+      "name": "Left apical segmental bronchial tree",
+      "sourceName": "left apical segmental bronchial tree",
+      "mesh": "FMA68223",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1226,
+      "sourceTriangles": 1226,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-13323",
+      "fma": "FMA13323",
+      "name": "Left clavicle",
+      "sourceName": "left clavicle",
+      "mesh": "FMA13323",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 1176,
+      "sourceTriangles": 1176,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8310",
+      "fma": "FMA8310",
+      "name": "Left eighth rib",
+      "sourceName": "left eighth rib",
+      "mesh": "FMA8310",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 8336,
+      "sourceTriangles": 8336,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8532",
+      "fma": "FMA8532",
+      "name": "Left eleventh rib",
+      "sourceName": "left eleventh rib",
+      "mesh": "FMA8532",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 4866,
+      "sourceTriangles": 4866,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8093",
+      "fma": "FMA8093",
+      "name": "Left fifth rib",
+      "sourceName": "left fifth rib",
+      "mesh": "FMA8093",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 9710,
+      "sourceTriangles": 9710,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7987",
+      "fma": "FMA7987",
+      "name": "Left first rib",
+      "sourceName": "left first rib",
+      "mesh": "FMA7987",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 3276,
+      "sourceTriangles": 3276,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8148",
+      "fma": "FMA8148",
+      "name": "Left fourth rib",
+      "sourceName": "left fourth rib",
+      "mesh": "FMA8148",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 8850,
+      "sourceTriangles": 8850,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-54738",
+      "fma": "FMA54738",
+      "name": "Left inferior nasal concha",
+      "sourceName": "left inferior nasal concha",
+      "mesh": "FMA54738",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 738,
+      "sourceTriangles": 738,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-49913",
+      "fma": "FMA49913",
+      "name": "Left inferior pulmonary vein",
+      "sourceName": "left inferior pulmonary vein",
+      "mesh": "FMA49913",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 1192,
+      "sourceTriangles": 1192,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68232",
+      "fma": "FMA68232",
+      "name": "Left lateral basal segmental bronchial tree",
+      "sourceName": "left lateral basal segmental bronchial tree",
+      "mesh": "FMA68232",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1126,
+      "sourceTriangles": 1126,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7396",
+      "fma": "FMA7396",
+      "name": "Left main bronchus",
+      "sourceName": "left main bronchus",
+      "mesh": "FMA7396",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 4136,
+      "sourceTriangles": 4136,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68230",
+      "fma": "FMA68230",
+      "name": "Left medial basal segmental bronchial tree",
+      "sourceName": "left medial basal segmental bronchial tree",
+      "mesh": "FMA68230",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 822,
+      "sourceTriangles": 822,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8391",
+      "fma": "FMA8391",
+      "name": "Left ninth rib",
+      "sourceName": "left ninth rib",
+      "mesh": "FMA8391",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 7576,
+      "sourceTriangles": 7576,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68233",
+      "fma": "FMA68233",
+      "name": "Left posterior basal segmental bronchial tree",
+      "sourceName": "left posterior basal segmental bronchial tree",
+      "mesh": "FMA68233",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1460,
+      "sourceTriangles": 1460,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68225",
+      "fma": "FMA68225",
+      "name": "Left posterior segmental bronchial tree",
+      "sourceName": "left posterior segmental bronchial tree",
+      "mesh": "FMA68225",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 440,
+      "sourceTriangles": 440,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-50873",
+      "fma": "FMA50873",
+      "name": "Left pulmonary artery",
+      "sourceName": "left pulmonary artery",
+      "mesh": "FMA50873",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 5450,
+      "sourceTriangles": 5450,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8012",
+      "fma": "FMA8012",
+      "name": "Left second rib",
+      "sourceName": "left second rib",
+      "mesh": "FMA8012",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 5594,
+      "sourceTriangles": 5594,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8256",
+      "fma": "FMA8256",
+      "name": "Left seventh rib",
+      "sourceName": "left seventh rib",
+      "mesh": "FMA8256",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 10032,
+      "sourceTriangles": 10032,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8202",
+      "fma": "FMA8202",
+      "name": "Left sixth rib",
+      "sourceName": "left sixth rib",
+      "mesh": "FMA8202",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 10264,
+      "sourceTriangles": 10264,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-49916",
+      "fma": "FMA49916",
+      "name": "Left superior pulmonary vein",
+      "sourceName": "left superior pulmonary vein",
+      "mesh": "FMA49916",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 886,
+      "sourceTriangles": 886,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68228",
+      "fma": "FMA68228",
+      "name": "Left superior segmental bronchial tree",
+      "sourceName": "left superior segmental bronchial tree",
+      "mesh": "FMA68228",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1144,
+      "sourceTriangles": 1144,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8472",
+      "fma": "FMA8472",
+      "name": "Left tenth rib",
+      "sourceName": "left tenth rib",
+      "mesh": "FMA8472",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 6826,
+      "sourceTriangles": 6826,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8039",
+      "fma": "FMA8039",
+      "name": "Left third rib",
+      "sourceName": "left third rib",
+      "mesh": "FMA8039",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 7254,
+      "sourceTriangles": 7254,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8534",
+      "fma": "FMA8534",
+      "name": "Left twelfth rib",
+      "sourceName": "left twelfth rib",
+      "mesh": "FMA8534",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 2818,
+      "sourceTriangles": 2818,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-55246",
+      "fma": "FMA55246",
+      "name": "Left vocal ligament",
+      "sourceName": "left vocal ligament",
+      "mesh": "FMA55246",
+      "layers": [
+        "respiratory",
+        "ligaments"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1858,
+      "sourceTriangles": 1858,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8612",
+      "fma": "FMA8612",
+      "name": "Pulmonary trunk",
+      "sourceName": "pulmonary trunk",
+      "mesh": "FMA8612",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 1302,
+      "sourceTriangles": 1302,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68321",
+      "fma": "FMA68321",
+      "name": "Right anterior basal segmental bronchial tree",
+      "sourceName": "right anterior basal segmental bronchial tree",
+      "mesh": "FMA68321",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 2260,
+      "sourceTriangles": 2260,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68212",
+      "fma": "FMA68212",
+      "name": "Right anterior segmental bronchial tree",
+      "sourceName": "right anterior segmental bronchial tree",
+      "mesh": "FMA68212",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 5608,
+      "sourceTriangles": 5608,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68211",
+      "fma": "FMA68211",
+      "name": "Right apical segmental bronchial tree",
+      "sourceName": "right apical segmental bronchial tree",
+      "mesh": "FMA68211",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 4504,
+      "sourceTriangles": 4504,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-13322",
+      "fma": "FMA13322",
+      "name": "Right clavicle",
+      "sourceName": "right clavicle",
+      "mesh": "FMA13322",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 1146,
+      "sourceTriangles": 1146,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8283",
+      "fma": "FMA8283",
+      "name": "Right eighth rib",
+      "sourceName": "right eighth rib",
+      "mesh": "FMA8283",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 8336,
+      "sourceTriangles": 8336,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8531",
+      "fma": "FMA8531",
+      "name": "Right eleventh rib",
+      "sourceName": "right eleventh rib",
+      "mesh": "FMA8531",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 4866,
+      "sourceTriangles": 4866,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8066",
+      "fma": "FMA8066",
+      "name": "Right fifth rib",
+      "sourceName": "right fifth rib",
+      "mesh": "FMA8066",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 9710,
+      "sourceTriangles": 9710,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7857",
+      "fma": "FMA7857",
+      "name": "Right first rib",
+      "sourceName": "right first rib",
+      "mesh": "FMA7857",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 3276,
+      "sourceTriangles": 3276,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7957",
+      "fma": "FMA7957",
+      "name": "Right fourth rib",
+      "sourceName": "right fourth rib",
+      "mesh": "FMA7957",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 8832,
+      "sourceTriangles": 8832,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-54737",
+      "fma": "FMA54737",
+      "name": "Right inferior nasal concha",
+      "sourceName": "right inferior nasal concha",
+      "mesh": "FMA54737",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 714,
+      "sourceTriangles": 714,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-49911",
+      "fma": "FMA49911",
+      "name": "Right inferior pulmonary vein",
+      "sourceName": "right inferior pulmonary vein",
+      "mesh": "FMA49911",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 196,
+      "sourceTriangles": 196,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68220",
+      "fma": "FMA68220",
+      "name": "Right lateral basal segmental bronchial tree",
+      "sourceName": "right lateral basal segmental bronchial tree",
+      "mesh": "FMA68220",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 2928,
+      "sourceTriangles": 2928,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68418",
+      "fma": "FMA68418",
+      "name": "Right main bronchus proper",
+      "sourceName": "right main bronchus proper",
+      "mesh": "FMA68418",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 4468,
+      "sourceTriangles": 4468,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68218",
+      "fma": "FMA68218",
+      "name": "Right medial basal segmental bronchial tree",
+      "sourceName": "right medial basal segmental bronchial tree",
+      "mesh": "FMA68218",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 902,
+      "sourceTriangles": 902,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8364",
+      "fma": "FMA8364",
+      "name": "Right ninth rib",
+      "sourceName": "right ninth rib",
+      "mesh": "FMA8364",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 7576,
+      "sourceTriangles": 7576,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68221",
+      "fma": "FMA68221",
+      "name": "Right posterior basal segmental bronchial tree",
+      "sourceName": "right posterior basal segmental bronchial tree",
+      "mesh": "FMA68221",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 4158,
+      "sourceTriangles": 4158,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68213",
+      "fma": "FMA68213",
+      "name": "Right posterior segmental bronchial tree",
+      "sourceName": "right posterior segmental bronchial tree",
+      "mesh": "FMA68213",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 4336,
+      "sourceTriangles": 4336,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-50872",
+      "fma": "FMA50872",
+      "name": "Right pulmonary artery",
+      "sourceName": "right pulmonary artery",
+      "mesh": "FMA50872",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 678,
+      "sourceTriangles": 678,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7882",
+      "fma": "FMA7882",
+      "name": "Right second rib",
+      "sourceName": "right second rib",
+      "mesh": "FMA7882",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 5594,
+      "sourceTriangles": 5594,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8229",
+      "fma": "FMA8229",
+      "name": "Right seventh rib",
+      "sourceName": "right seventh rib",
+      "mesh": "FMA8229",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 10032,
+      "sourceTriangles": 10032,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8175",
+      "fma": "FMA8175",
+      "name": "Right sixth rib",
+      "sourceName": "right sixth rib",
+      "mesh": "FMA8175",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 10246,
+      "sourceTriangles": 10246,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-49914",
+      "fma": "FMA49914",
+      "name": "Right superior pulmonary vein",
+      "sourceName": "right superior pulmonary vein",
+      "mesh": "FMA49914",
+      "layers": [
+        "cardiovascular",
+        "pulmonary_circulation"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 324,
+      "sourceTriangles": 324,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68216",
+      "fma": "FMA68216",
+      "name": "Right superior segmental bronchial tree",
+      "sourceName": "right superior segmental bronchial tree",
+      "mesh": "FMA68216",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 7716,
+      "sourceTriangles": 7716,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8445",
+      "fma": "FMA8445",
+      "name": "Right tenth rib",
+      "sourceName": "right tenth rib",
+      "mesh": "FMA8445",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 6820,
+      "sourceTriangles": 6820,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7909",
+      "fma": "FMA7909",
+      "name": "Right third rib",
+      "sourceName": "right third rib",
+      "mesh": "FMA7909",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 7254,
+      "sourceTriangles": 7254,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-8533",
+      "fma": "FMA8533",
+      "name": "Right twelfth rib",
+      "sourceName": "right twelfth rib",
+      "mesh": "FMA8533",
+      "layers": [
+        "skeletal"
+      ],
+      "system": "skeletal",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 2818,
+      "sourceTriangles": 2818,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-55245",
+      "fma": "FMA55245",
+      "name": "Right vocal ligament",
+      "sourceName": "right vocal ligament",
+      "mesh": "FMA55245",
+      "layers": [
+        "respiratory",
+        "ligaments"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 1644,
+      "sourceTriangles": 1644,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-59503",
+      "fma": "FMA59503",
+      "name": "Septal nasal cartilage",
+      "sourceName": "septal nasal cartilage",
+      "mesh": "FMA59503",
+      "layers": [
+        "respiratory",
+        "cartilage"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 0,
+      "triangles": 414,
+      "sourceTriangles": 414,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-68226",
+      "fma": "FMA68226",
+      "name": "Superior lingular bronchial tree",
+      "sourceName": "superior lingular bronchial tree",
+      "mesh": "FMA68226",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 664,
+      "sourceTriangles": 664,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-55099",
+      "fma": "FMA55099",
+      "name": "Thyroid cartilage",
+      "sourceName": "thyroid cartilage",
+      "mesh": "FMA55099",
+      "layers": [
+        "respiratory",
+        "cartilage"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 2610,
+      "sourceTriangles": 2610,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-7394",
+      "fma": "FMA7394",
+      "name": "Trachea",
+      "sourceName": "trachea",
+      "mesh": "FMA7394",
+      "layers": [
+        "respiratory"
+      ],
+      "system": "respiratory",
+      "sex": "male",
+      "depth": 4,
+      "triangles": 4996,
+      "sourceTriangles": 4996,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-74912",
+      "fma": "FMA74912",
+      "name": "Trunk of anterior interventricular branch of left coronary artery",
+      "sourceName": "trunk of anterior interventricular branch of left coronary artery",
+      "mesh": "FMA74912",
+      "layers": [
+        "cardiovascular",
+        "coronary"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 3032,
+      "sourceTriangles": 3032,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-3855",
+      "fma": "FMA3855",
+      "name": "Trunk of left coronary artery",
+      "sourceName": "trunk of left coronary artery",
+      "mesh": "FMA3855",
+      "layers": [
+        "cardiovascular",
+        "coronary"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 204,
+      "sourceTriangles": 204,
+      "clusterMillimeters": null,
+      "uberon": null
+    },
+    {
+      "id": "fma-3802",
+      "fma": "FMA3802",
+      "name": "Trunk of right coronary artery",
+      "sourceName": "trunk of right coronary artery",
+      "mesh": "FMA3802",
+      "layers": [
+        "cardiovascular",
+        "coronary"
+      ],
+      "system": "cardiovascular",
+      "sex": "male",
+      "depth": 3,
+      "triangles": 4502,
+      "sourceTriangles": 4502,
+      "clusterMillimeters": null,
+      "uberon": null
+    }
+  ]
+}

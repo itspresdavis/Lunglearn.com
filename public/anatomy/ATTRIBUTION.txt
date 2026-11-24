@@ -1,0 +1,10 @@
+BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International.
+License: https://creativecommons.org/licenses/by/4.0/
+Database license: https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html
+Dataset: https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html
+Source file: isa_BP3D_4.0_obj_99.zip (BodyParts3D 4.0, IS-A tree, 99% polygon reduction).
+Publication: Mitsuhashi N, et al. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Research. 2009. https://doi.org/10.1093/nar/gkn613
+Lung Learn subset: adult male thoracic cage, airway, diaphragm, selected pulmonary vessels, heart-chamber cavities, and neighboring esophagus.
+Individual OBJ files distributed in that archive still contain a 2013 header naming CC BY-SA 2.1 Japan. That header points at the database license URL, which the Database Center for Life Science updated on 2025-02-27 to CC BY 4.0. Lung Learn follows the current license statement and keeps this notice with the derivative.
+Some dense muscle meshes were simplified by vertex clustering. The millimeter cell, when used, is stored in anatomy-meshes.json. Clustering changes surface detail; it does not add anatomy.
+This file is not a complete male body and it is not a female body.

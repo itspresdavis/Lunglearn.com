@@ -1,0 +1,46 @@
+{
+  "name": "lung-learn",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lung Learn, the home of respiratory education.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "anatomy": "python3 scripts/build_anatomy_glb.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itspresdavis/Lunglearn.com.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itspresdavis/Lunglearn.com/issues"
+  },
+  "homepage": "https://github.com/itspresdavis/Lunglearn.com#readme",
+  "dependencies": {
+    "next": "^15.5.29",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "stripe": "^23.2.0",
+    "three": "^0.187.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.29",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.1"
+  }
+}
