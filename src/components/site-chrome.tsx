@@ -4,23 +4,29 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const NAV = [
-  ["/", "Home"],
-  ["/explore", "Explore the Career"],
-  ["/atlas", "Anatomy Atlas"],
-  ["/academy", "Respiratory Academy"],
-  ["/diseases", "Disease Library"],
+const STUDY = [
+  ["/atlas", "Atlas"],
+  ["/academy", "Academy"],
+  ["/diseases", "Diseases"],
   ["/pharmacology", "Pharmacology"],
-  ["/reference", "Clinical Reference"],
-  ["/simulations", "Clinical Simulations"],
-  ["/board-prep", "Board Preparation"],
+  ["/reference", "Reference"],
+  ["/simulations", "Simulations"],
+  ["/board-prep", "Board prep"],
   ["/calculators", "Calculators"],
-  ["/study", "Study Tools"],
-  ["/educators", "Educator Resources"],
-  ["/schools", "Find a School"],
-  ["/pricing", "Pricing"],
-  ["/learn", "My Learning"],
 ] as const;
+
+const MORE = [
+  ["/explore", "Career"],
+  ["/schools", "Schools"],
+  ["/study", "Study"],
+  ["/educators", "Educators"],
+  ["/pricing", "Pricing"],
+  ["/learn", "My learning"],
+] as const;
+
+function Mark() {
+  return <span className="mark" aria-hidden="true" />;
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -44,57 +50,60 @@ export function SiteHeader() {
     window.localStorage.setItem("ll-theme", next);
   }
 
+  function item(href: string, label: string) {
+    const current = pathname === href || pathname.startsWith(`${href}/`);
+    return (
+      <Link key={href} href={href} aria-current={current ? "page" : undefined} onClick={() => setOpen(false)}>
+        {label}
+      </Link>
+    );
+  }
+
   return (
     <header className="topbar">
-      <div className="wrap-wide brand-row">
-        <Link href="/" className="brand">
-          <svg width="36" height="36" viewBox="0 0 32 32" aria-hidden="true">
-            <rect width="32" height="32" rx="4" fill="#0e5c66" />
-            <path d="M8 23V9h3.2l6.3 9.2V9H21v14h-3.1L11.5 13.7V23H8Z" fill="#f4fbfa" />
-          </svg>
-          <span>
-            <strong>Lung Learn</strong>
-            <small>The home of respiratory education</small>
-          </span>
-        </Link>
-        <div className="tools">
-          <form
-            className="search"
-            role="search"
-            onSubmit={(event) => {
-              event.preventDefault();
-              router.push(`/search?q=${encodeURIComponent(query)}`);
-            }}
-          >
-            <label className="skip" htmlFor="site-search">
-              Search Lung Learn
-            </label>
-            <input
-              id="site-search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search anatomy, disease, drugs"
-            />
-            <button type="submit">Search</button>
-          </form>
-          <button type="button" className="btn-quiet" onClick={toggleTheme}>
-            {theme === "dark" ? "Light" : "Dark"}
-          </button>
-          <button type="button" className="btn-quiet menu-btn" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
-            Menu
-          </button>
+      <div className="mast">
+        <div className="wrap-wide mast-inner">
+          <Link href="/" className="brand">
+            <Mark />
+            <span>
+              <strong>Lung Learn</strong>
+              <small>Respiratory education</small>
+            </span>
+          </Link>
+          <div className="mast-tools">
+            <form
+              className="search"
+              role="search"
+              onSubmit={(event) => {
+                event.preventDefault();
+                router.push(`/search?q=${encodeURIComponent(query)}`);
+              }}
+            >
+              <label className="skip" htmlFor="site-search">
+                Search Lung Learn
+              </label>
+              <input
+                id="site-search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search the library"
+              />
+              <button type="submit">Search</button>
+            </form>
+            <button type="button" className="btn-quiet" onClick={toggleTheme}>
+              {theme === "dark" ? "Light" : "Dark"}
+            </button>
+            <button type="button" className="btn-quiet menu-btn" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+              Menu
+            </button>
+          </div>
         </div>
       </div>
       <div className="wrap-wide">
         <nav className={open ? "nav-row open" : "nav-row"} aria-label="Primary">
-          {NAV.map(([href, label]) => {
-            const current = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
-            return (
-              <Link key={href} href={href} aria-current={current ? "page" : undefined} onClick={() => setOpen(false)}>
-                {label}
-              </Link>
-            );
-          })}
+          {STUDY.map(([href, label]) => item(href, label))}
+          <span className="nav-split" aria-hidden="true" />
+          {MORE.map(([href, label]) => item(href, label))}
         </nav>
       </div>
     </header>
@@ -104,14 +113,32 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="site">
-      <div className="wrap-wide">
-        <p>
-          Lung Learn is an independent education product. It is not affiliated with the NBRC, CoARC, AARC, or any school. Nothing on this site is a patient order, a salary promise, or a guarantee of examination results.
-        </p>
-        <p>
-          <Link href="/report">Report an error</Link> · <Link href="/legal/terms">Terms</Link> · <Link href="/legal/privacy">Privacy</Link> · <Link href="/pricing">Pricing</Link>
-        </p>
+      <div className="wrap-wide foot">
+        <div>
+          <strong>Lung Learn</strong>
+          <p>An independent library for respiratory therapy students and practicing therapists. Not affiliated with the NBRC, CoARC, AARC, or any school.</p>
+        </div>
+        <div>
+          <p className="foot-label">Library</p>
+          <ul>
+            <li><Link href="/atlas">Anatomy atlas</Link></li>
+            <li><Link href="/academy">Respiratory academy</Link></li>
+            <li><Link href="/diseases">Disease library</Link></li>
+            <li><Link href="/calculators">Calculators</Link></li>
+            <li><Link href="/board-prep">Board preparation</Link></li>
+          </ul>
+        </div>
+        <div>
+          <p className="foot-label">Policies</p>
+          <ul>
+            <li><Link href="/report">Report an error</Link></li>
+            <li><Link href="/legal/terms">Terms</Link></li>
+            <li><Link href="/legal/privacy">Privacy</Link></li>
+            <li><Link href="/pricing">Pricing</Link></li>
+          </ul>
+        </div>
       </div>
+      <div className="wrap-wide foot-note">Nothing on this site is a patient order, a salary promise, or a guarantee of examination results.</div>
     </footer>
   );
 }
