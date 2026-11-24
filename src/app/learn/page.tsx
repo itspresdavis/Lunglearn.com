@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SignOutButton } from "@/components/account-panels";
-import { CompleteLessonButton } from "@/components/interactive";
 import { lessons } from "@/content/curriculum";
 import { currentSession } from "@/lib/session";
 import { getStore } from "@/server/store";
@@ -13,38 +12,46 @@ export default async function LearnPage() {
   const session = await currentSession();
   if (!session) {
     return (
-      <section className="section wrap">
+      <section className="section wrap narrow">
         <h1>My learning</h1>
-        <p>
-          <Link href="/sign-in">Sign in</Link> or <Link href="/sign-up">create an account</Link>.
+        <p>Sign in to keep your place, notes, and cards.</p>
+        <p className="actions">
+          <Link className="btn" href="/sign-in">Sign in</Link>
+          <Link className="btn-quiet" href="/sign-up">Create an account</Link>
         </p>
       </section>
     );
   }
   const progress = getStore().progressFor(session.user.id);
   const done = new Set(progress.map((item) => item.lessonSlug));
+  const next = lessons.find((lesson) => !done.has(`${lesson.course}/${lesson.slug}`));
+  const plan = session.entitlement === "individual_premium" ? "Individual library" : session.entitlement === "institutional" ? "Institutional" : "Free";
   return (
     <section className="section wrap">
       <h1>My learning</h1>
-      <p>
-        {session.user.email} · {session.entitlement === "individual_premium" ? "Individual library" : session.entitlement === "institutional" ? "Institutional" : "Free"}
-      </p>
-      <SignOutButton />
-      <p>
-        <Link href="/account/billing">Billing</Link> · <Link href="/account/verification">Verification</Link> · <Link href="/study">Study desk</Link>
-      </p>
-      <h2>Lessons</h2>
+      <p className="muted">{session.user.email} · {plan}</p>
+      {next ? (
+        <p className="actions">
+          <Link className="btn" href={`/academy/${next.course}/${next.slug}`}>Continue: {next.title}</Link>
+        </p>
+      ) : (
+        <p>You have opened every lesson on your list.</p>
+      )}
       <ul>
         {lessons.map((lesson) => {
           const key = `${lesson.course}/${lesson.slug}`;
           return (
             <li key={key}>
               <Link href={`/academy/${lesson.course}/${lesson.slug}`}>{lesson.title}</Link>
-              {done.has(key) ? " · completed" : ""} <CompleteLessonButton slug={key} />
+              {done.has(key) ? <span className="muted"> · Done</span> : null}
             </li>
           );
         })}
       </ul>
+      <p className="muted">
+        <Link href="/study">Study desk</Link> · <Link href="/account/billing">Billing</Link> · <Link href="/account/verification">Verification</Link>
+      </p>
+      <SignOutButton />
     </section>
   );
 }

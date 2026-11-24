@@ -42,13 +42,11 @@ export default function HomePage() {
     <>
       <section className="wrap home">
         <header className="home-intro">
-          <div>
-            <h1>A library for respiratory care.</h1>
-            <p>Select a structure in the thoracic atlas, read a disease or drug monograph, run a formula, or sit a practice question. Clinical lessons remain drafts until a named reviewer accepts them.</p>
-          </div>
+          <h1>Where do you want to start?</h1>
+          <p>Open the atlas, continue a lesson, or pick a section below.</p>
           <p className="actions">
-            <Link className="btn" href="/atlas">Open the atlas</Link>
-            <Link className="btn-quiet" href="/academy">Browse the academy</Link>
+            <Link className="btn" href="/learn">Continue learning</Link>
+            <Link className="btn-quiet" href="/atlas">Open the atlas</Link>
           </p>
         </header>
         <div className="shelves">
@@ -56,40 +54,25 @@ export default function HomePage() {
             <section key={shelf.title}>
               <h2>{shelf.title}</h2>
               <ul className="shelf">
-                {shelf.items.map(([href, title, count, note]) => (
+                {shelf.items.map(([href, title, count]) => (
                   <li key={href}>
                     <Link href={href}>
                       {title}
                       <span className="count">{count}</span>
                     </Link>
-                    <span className="note">{note}</span>
                   </li>
                 ))}
               </ul>
             </section>
           ))}
         </div>
-        <h2>United States occupation figures</h2>
-        <p className="source">Bureau of Labor Statistics, May 2025. National estimates, not a job offer.</p>
-        <dl className="facts">
-          <div>
-            <dt>Median annual wage</dt>
-            <dd>{wage ? money(wage.value) : "—"}</dd>
-          </div>
-          <div>
-            <dt>Median hourly wage</dt>
-            <dd>{hourly ? money(hourly.value) : "—"}</dd>
-          </div>
-          <div>
-            <dt>Jobs</dt>
-            <dd>{jobs ? Number(jobs.value).toLocaleString("en-US") : "—"}</dd>
-          </div>
-          <div>
-            <dt>Projected growth</dt>
-            <dd>{growth ? `${growth.value}%` : "—"}</dd>
-            <dd className="note">2025–2035</dd>
-          </div>
-        </dl>
+        <p className="source wage-line">
+          U.S. median wage {wage ? money(wage.value) : "—"}
+          {hourly ? ` (${money(hourly.value)} an hour)` : ""}.{" "}
+          {jobs ? `${Number(jobs.value).toLocaleString("en-US")} jobs. ` : ""}
+          {growth ? `${growth.value}% projected growth, 2025–2035. ` : ""}
+          <Link href="/explore/respiratory-therapist-salary">Bureau of Labor Statistics figures</Link>
+        </p>
       </section>
       <script
         type="application/ld+json"
