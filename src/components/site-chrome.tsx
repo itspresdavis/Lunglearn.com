@@ -4,28 +4,45 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const STUDY = [
-  ["/atlas", "Atlas"],
-  ["/academy", "Academy"],
-  ["/diseases", "Diseases"],
-  ["/pharmacology", "Pharmacology"],
-  ["/reference", "Reference"],
-  ["/simulations", "Simulations"],
-  ["/board-prep", "Board prep"],
-  ["/calculators", "Calculators"],
-] as const;
-
-const MORE = [
-  ["/explore", "Career"],
-  ["/schools", "Schools"],
-  ["/study", "Study"],
-  ["/educators", "Educators"],
-  ["/pricing", "Pricing"],
-  ["/learn", "My learning"],
+const GROUPS = [
+  {
+    label: "Study",
+    links: [
+      ["/atlas", "Atlas"],
+      ["/academy", "Academy"],
+      ["/diseases", "Diseases"],
+      ["/pharmacology", "Pharmacology"],
+    ],
+  },
+  {
+    label: "Practice",
+    links: [
+      ["/reference", "Reference"],
+      ["/simulations", "Simulations"],
+      ["/board-prep", "Board prep"],
+      ["/calculators", "Calculators"],
+    ],
+  },
+  {
+    label: "Career",
+    links: [
+      ["/explore", "Career"],
+      ["/schools", "Schools"],
+      ["/study", "Study desk"],
+      ["/educators", "Educators"],
+    ],
+  },
 ] as const;
 
 function Mark() {
-  return <span className="mark" aria-hidden="true" />;
+  return (
+    <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="10" fill="#1a56a0" />
+      <path fill="#fff" d="M30 8h4v12h-4z" />
+      <path fill="#fff" d="M30 18c-8 1-16 8-16 18 0 8 5 14 11 14 4 0 6-3 6-8V18z" />
+      <path fill="#fff" d="M34 18c8 1 16 8 16 18 0 8-5 14-11 14-4 0-6-3-6-8V18z" />
+    </svg>
+  );
 }
 
 export function SiteHeader() {
@@ -71,6 +88,12 @@ export function SiteHeader() {
             </span>
           </Link>
           <div className="mast-tools">
+            <Link href="/pricing" className="mast-link" aria-current={pathname === "/pricing" ? "page" : undefined}>
+              Pricing
+            </Link>
+            <Link href="/learn" className="mast-link" aria-current={pathname === "/learn" || pathname.startsWith("/learn/") ? "page" : undefined}>
+              My learning
+            </Link>
             <form
               className="search"
               role="search"
@@ -86,7 +109,7 @@ export function SiteHeader() {
                 id="site-search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search the library"
+                placeholder="Search"
               />
               <button type="submit">Search</button>
             </form>
@@ -101,9 +124,17 @@ export function SiteHeader() {
       </div>
       <div className="wrap-wide">
         <nav className={open ? "nav-row open" : "nav-row"} aria-label="Primary">
-          {STUDY.map(([href, label]) => item(href, label))}
-          <span className="nav-split" aria-hidden="true" />
-          {MORE.map(([href, label]) => item(href, label))}
+          {GROUPS.map((group) => (
+            <div className="nav-group" key={group.label}>
+              <span className="nav-label">{group.label}</span>
+              {group.links.map(([href, label]) => item(href, label))}
+            </div>
+          ))}
+          <div className="nav-group nav-account">
+            <span className="nav-label">Account</span>
+            {item("/pricing", "Pricing")}
+            {item("/learn", "My learning")}
+          </div>
         </nav>
       </div>
     </header>
@@ -119,26 +150,39 @@ export function SiteFooter() {
           <p>An independent library for respiratory therapy students and practicing therapists. Not affiliated with the NBRC, CoARC, AARC, or any school.</p>
         </div>
         <div>
-          <p className="foot-label">Library</p>
+          <p className="foot-label">Study</p>
           <ul>
             <li><Link href="/atlas">Anatomy atlas</Link></li>
             <li><Link href="/academy">Respiratory academy</Link></li>
             <li><Link href="/diseases">Disease library</Link></li>
-            <li><Link href="/calculators">Calculators</Link></li>
-            <li><Link href="/board-prep">Board preparation</Link></li>
+            <li><Link href="/pharmacology">Pharmacology</Link></li>
           </ul>
         </div>
         <div>
-          <p className="foot-label">Policies</p>
+          <p className="foot-label">Practice</p>
           <ul>
-            <li><Link href="/report">Report an error</Link></li>
-            <li><Link href="/legal/terms">Terms</Link></li>
-            <li><Link href="/legal/privacy">Privacy</Link></li>
-            <li><Link href="/pricing">Pricing</Link></li>
+            <li><Link href="/reference">Clinical reference</Link></li>
+            <li><Link href="/simulations">Simulations</Link></li>
+            <li><Link href="/board-prep">Board preparation</Link></li>
+            <li><Link href="/calculators">Calculators</Link></li>
+          </ul>
+        </div>
+        <div>
+          <p className="foot-label">Career</p>
+          <ul>
+            <li><Link href="/explore">Explore the career</Link></li>
+            <li><Link href="/schools">Find a school</Link></li>
+            <li><Link href="/study">Study desk</Link></li>
+            <li><Link href="/educators">Educators</Link></li>
           </ul>
         </div>
       </div>
-      <div className="wrap-wide foot-note">Nothing on this site is a patient order, a salary promise, or a guarantee of examination results.</div>
+      <div className="wrap-wide foot-note">
+        <p>Nothing on this site is a patient order, a salary promise, or a guarantee of examination results.</p>
+        <p>
+          <Link href="/pricing">Pricing</Link> · <Link href="/report">Report an error</Link> · <Link href="/legal/terms">Terms</Link> · <Link href="/legal/privacy">Privacy</Link>
+        </p>
+      </div>
     </footer>
   );
 }
