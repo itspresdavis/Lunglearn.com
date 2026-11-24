@@ -67,11 +67,11 @@ export default function HomePage() {
           ))}
         </div>
         <p className="source wage-line">
-          U.S. median wage {wage ? money(wage.value) : "—"}
-          {hourly ? ` (${money(hourly.value)} an hour)` : ""}.{" "}
-          {jobs ? `${Number(jobs.value).toLocaleString("en-US")} jobs. ` : ""}
-          {growth ? `${growth.value}% projected growth, 2025–2035. ` : ""}
-          <Link href="/explore/respiratory-therapist-salary">Bureau of Labor Statistics figures</Link>
+          Median U.S. wage {wage ? money(wage.value) : "—"}
+          {hourly ? `, ${money(hourly.value)} an hour` : ""}.{" "}
+          {jobs ? `${Number(jobs.value).toLocaleString("en-US")} jobs, ` : ""}
+          {growth ? `with ${growth.value}% projected growth from 2025 to 2035. ` : ""}
+          <Link href="/explore/respiratory-therapist-salary">Bureau of Labor Statistics</Link>
         </p>
       </section>
       <script
