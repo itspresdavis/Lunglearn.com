@@ -144,18 +144,45 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="site">
-      <div className="wrap-wide foot-simple">
-        <p>Lung Learn is independent. It is not affiliated with the NBRC, CoARC, AARC, or any school, and nothing here is a patient order, a wage offer, or an exam guarantee.</p>
-        <p className="foot-links">
-          <Link href="/atlas">Atlas</Link>
-          <Link href="/academy">Academy</Link>
-          <Link href="/diseases">Diseases</Link>
-          <Link href="/pharmacology">Pharmacology</Link>
-          <Link href="/calculators">Calculators</Link>
-          <Link href="/board-prep">Board prep</Link>
-          <Link href="/explore">Career</Link>
-          <Link href="/schools">Schools</Link>
-          <Link href="/pricing">Pricing</Link>
+      <div className="wrap-wide foot">
+        <div>
+          <Link href="/" className="brand">
+            <Mark />
+            <strong>Lung Learn</strong>
+          </Link>
+          <p>An independent library for respiratory therapy students and practicing therapists.</p>
+        </div>
+        <div>
+          <p className="foot-label">Study</p>
+          <ul>
+            <li><Link href="/atlas">Anatomy atlas</Link></li>
+            <li><Link href="/academy">Respiratory academy</Link></li>
+            <li><Link href="/diseases">Disease library</Link></li>
+            <li><Link href="/pharmacology">Pharmacology</Link></li>
+          </ul>
+        </div>
+        <div>
+          <p className="foot-label">Practice</p>
+          <ul>
+            <li><Link href="/calculators">Calculators</Link></li>
+            <li><Link href="/board-prep">Board preparation</Link></li>
+            <li><Link href="/simulations">Simulations</Link></li>
+            <li><Link href="/reference">Clinical reference</Link></li>
+          </ul>
+        </div>
+        <div>
+          <p className="foot-label">Account</p>
+          <ul>
+            <li><Link href="/learn">My learning</Link></li>
+            <li><Link href="/pricing">Pricing</Link></li>
+            <li><Link href="/schools">Find a school</Link></li>
+            <li><Link href="/explore">Explore the career</Link></li>
+          </ul>
+        </div>
+      </div>
+      <div className="wrap-wide foot-note">
+        <p>Not affiliated with the NBRC, CoARC, AARC, or any school. Nothing here is a patient order, a wage offer, or an examination guarantee.</p>
+        <p>
           <Link href="/report">Report an error</Link>
           <Link href="/legal/terms">Terms</Link>
           <Link href="/legal/privacy">Privacy</Link>

@@ -43,23 +43,22 @@ export default function HomePage() {
       <section className="wrap home">
         <header className="home-intro">
           <h1>Where do you want to start?</h1>
-          <p>Open the atlas, continue a lesson, or pick a section below.</p>
+            <p>The atlas, the lessons, and the formulas live in one library. Clinical lessons stay in draft until a named reviewer accepts them.</p>
           <p className="actions">
             <Link className="btn" href="/learn">Continue learning</Link>
             <Link className="btn-quiet" href="/atlas">Open the atlas</Link>
           </p>
         </header>
-        <div className="shelves">
+        <div className="catalog-index">
           {shelves.map((shelf) => (
             <section key={shelf.title}>
               <h2>{shelf.title}</h2>
-              <ul className="shelf">
-                {shelf.items.map(([href, title, count]) => (
+              <ul>
+                {shelf.items.map(([href, title, count, note]) => (
                   <li key={href}>
-                    <Link href={href}>
-                      {title}
-                      <span className="count">{count}</span>
-                    </Link>
+                    <Link href={href}>{title}</Link>
+                    <span className="count">{count}</span>
+                    <span className="note">{note}</span>
                   </li>
                 ))}
               </ul>

@@ -343,42 +343,50 @@ export function AtlasViewer({ highlight, quiz = false }: { highlight?: string; q
   return (
     <div>
       <div className="toolbar" role="toolbar" aria-label="Atlas">
-        <button type="button" className="btn-quiet" onClick={() => setSex("male")} aria-pressed={sex === "male"}>
-          Adult male
-        </button>
-        <button type="button" className="btn-quiet" onClick={() => setSex("female")} aria-pressed={sex === "female"}>
-          Adult female
-        </button>
-        {(["anterior", "posterior", "left", "right", "superior"] as ViewName[]).map((view) => (
-          <button key={view} type="button" className="btn-quiet" onClick={() => apiRef.current?.view(view)}>
-            {view}
+        <div className="tool-group">
+          <button type="button" className="btn-quiet" onClick={() => setSex("male")} aria-pressed={sex === "male"}>
+            Adult male
           </button>
-        ))}
-        <button type="button" className="btn-quiet" onClick={() => setHidden((current) => [...new Set([...current, ...selected])])}>
-          Hide selected
-        </button>
-        <button
-          type="button"
-          className="btn-quiet"
-          onClick={() => setHidden(MESHES.map((mesh) => mesh.mesh).filter((id) => !selected.includes(id)))}
-        >
-          Isolate
-        </button>
-        <button type="button" className="btn-quiet" onClick={() => setHidden([])}>
-          Restore hidden
-        </button>
-        <button type="button" className="btn-quiet" onClick={() => apiRef.current?.shot()}>
-          Screenshot
-        </button>
-        <button type="button" className="btn-quiet" onClick={() => mountRef.current?.requestFullscreen?.()}>
-          Full screen
-        </button>
-        <button type="button" className="btn-quiet" onClick={saveView}>
-          Save view
-        </button>
-        <button type="button" className="btn-quiet" onClick={() => setBreathe((value) => !value)} aria-pressed={breathe}>
-          Schematic breath
-        </button>
+          <button type="button" className="btn-quiet" onClick={() => setSex("female")} aria-pressed={sex === "female"}>
+            Adult female
+          </button>
+        </div>
+        <div className="tool-group">
+          {(["anterior", "posterior", "left", "right", "superior"] as ViewName[]).map((view) => (
+            <button key={view} type="button" className="btn-quiet" onClick={() => apiRef.current?.view(view)}>
+              {view}
+            </button>
+          ))}
+        </div>
+        <div className="tool-group">
+          <button type="button" className="btn-quiet" onClick={() => setHidden((current) => [...new Set([...current, ...selected])])}>
+            Hide selected
+          </button>
+          <button
+            type="button"
+            className="btn-quiet"
+            onClick={() => setHidden(MESHES.map((mesh) => mesh.mesh).filter((id) => !selected.includes(id)))}
+          >
+            Isolate
+          </button>
+          <button type="button" className="btn-quiet" onClick={() => setHidden([])}>
+            Restore hidden
+          </button>
+        </div>
+        <div className="tool-group">
+          <button type="button" className="btn-quiet" onClick={() => apiRef.current?.shot()}>
+            Screenshot
+          </button>
+          <button type="button" className="btn-quiet" onClick={() => mountRef.current?.requestFullscreen?.()}>
+            Full screen
+          </button>
+          <button type="button" className="btn-quiet" onClick={saveView}>
+            Save view
+          </button>
+          <button type="button" className="btn-quiet" onClick={() => setBreathe((value) => !value)} aria-pressed={breathe}>
+            Schematic breath
+          </button>
+        </div>
       </div>
       {sex === "female" ? (
         <section className="card">

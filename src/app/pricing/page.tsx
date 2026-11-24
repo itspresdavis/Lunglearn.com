@@ -13,11 +13,11 @@ export default function PricingPage() {
     <section className="section wrap">
       <p className="kicker">Access</p>
       <h1>Pricing</h1>
-      <div className="grid grid-3">
+      <div className="plans">
         {(["free", "student", "standard"] as const).map((id) => (
-          <article key={id} className="card">
+          <article key={id} className="plan">
             <h2>{PLANS[id].name}</h2>
-            <p className="stat">{PLANS[id].monthlyCents === 0 ? "$0" : `$${(PLANS[id].monthlyCents / 100).toFixed(2)}`}</p>
+            <p className="stat">{PLANS[id].monthlyCents === 0 ? "$0" : `$${(PLANS[id].monthlyCents / 100).toFixed(2)}`}<span> / month</span></p>
             <p>{PLANS[id].summary}</p>
           </article>
         ))}
