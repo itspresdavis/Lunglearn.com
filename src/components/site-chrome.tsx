@@ -4,15 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const PRIMARY = [
-  ["/atlas", "Atlas"],
-  ["/academy", "Academy"],
-  ["/diseases", "Diseases"],
-  ["/calculators", "Calculators"],
-  ["/board-prep", "Board prep"],
-] as const;
-
-const MENU = [
+const SECTIONS = [
   {
     label: "Study",
     links: [
@@ -34,7 +26,7 @@ const MENU = [
   {
     label: "Career",
     links: [
-      ["/explore", "Career"],
+      ["/explore", "Explore"],
       ["/schools", "Schools"],
       ["/study", "Study desk"],
       ["/educators", "Educators"],
@@ -76,9 +68,15 @@ export function SiteHeader() {
     window.localStorage.setItem("ll-theme", next);
   }
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   function current(href: string) {
     return pathname === href || pathname.startsWith(`${href}/`);
   }
+
+  const section = SECTIONS.find((group) => group.links.some(([href]) => current(href)));
 
   return (
     <header className="topbar">
@@ -88,9 +86,9 @@ export function SiteHeader() {
           <strong>Lung Learn</strong>
         </Link>
         <nav className="primary" aria-label="Primary">
-          {PRIMARY.map(([href, label]) => (
-            <Link key={href} href={href} aria-current={current(href) ? "page" : undefined}>
-              {label}
+          {SECTIONS.map((group) => (
+            <Link key={group.label} href={group.links[0][0]} aria-current={section?.label === group.label ? "location" : undefined}>
+              {group.label}
             </Link>
           ))}
         </nav>
@@ -125,8 +123,19 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+      {section ? (
+        <nav className="subnav" aria-label={section.label}>
+          <div className="wrap-wide subnav-row">
+            {section.links.map(([href, label]) => (
+              <Link key={href} href={href} aria-current={current(href) ? "page" : undefined}>
+                {label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      ) : null}
       <nav className={open ? "mobile-menu open" : "mobile-menu"} aria-label="All sections" hidden={!open}>
-        {MENU.map((group) => (
+        {SECTIONS.map((group) => (
           <div key={group.label}>
             <p className="nav-label">{group.label}</p>
             {group.links.map(([href, label]) => (
@@ -155,9 +164,9 @@ export function SiteFooter() {
         <div>
           <p className="foot-label">Study</p>
           <ul>
-            <li><Link href="/atlas">Anatomy atlas</Link></li>
-            <li><Link href="/academy">Respiratory academy</Link></li>
-            <li><Link href="/diseases">Disease library</Link></li>
+            <li><Link href="/atlas">Atlas</Link></li>
+            <li><Link href="/academy">Academy</Link></li>
+            <li><Link href="/diseases">Diseases</Link></li>
             <li><Link href="/pharmacology">Pharmacology</Link></li>
           </ul>
         </div>
@@ -165,18 +174,19 @@ export function SiteFooter() {
           <p className="foot-label">Practice</p>
           <ul>
             <li><Link href="/calculators">Calculators</Link></li>
-            <li><Link href="/board-prep">Board preparation</Link></li>
+            <li><Link href="/board-prep">Board prep</Link></li>
             <li><Link href="/simulations">Simulations</Link></li>
-            <li><Link href="/reference">Clinical reference</Link></li>
+            <li><Link href="/reference">Reference</Link></li>
           </ul>
         </div>
         <div>
-          <p className="foot-label">Account</p>
+          <p className="foot-label">Career</p>
           <ul>
-            <li><Link href="/learn">My learning</Link></li>
+            <li><Link href="/explore">Explore</Link></li>
+            <li><Link href="/schools">Schools</Link></li>
+            <li><Link href="/study">Study desk</Link></li>
+            <li><Link href="/educators">Educators</Link></li>
             <li><Link href="/pricing">Pricing</Link></li>
-            <li><Link href="/schools">Find a school</Link></li>
-            <li><Link href="/explore">Explore the career</Link></li>
           </ul>
         </div>
       </div>

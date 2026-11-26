@@ -9,32 +9,33 @@ export default function HomePage() {
   const hourly = handbook.statistics.find((item) => item.id === "median-hourly");
   const jobs = handbook.statistics.find((item) => item.id === "employment");
   const growth = handbook.statistics.find((item) => item.id === "growth");
-  const shelves: { title: string; items: [string, string, string, string][] }[] = [
+  const shelves: { title: string; items: [string, string, string][] }[] = [
     {
       title: "Study",
       items: [
-        ["/atlas", "Anatomy atlas", String(counts.anatomyMeshes), "Adult male thoracic meshes you can select. A female model is not made by recoloring the male file."],
-        ["/academy", "Respiratory academy", String(counts.lessons), "Lessons with objectives and checks. Clinical drafts stay unpublished until a named reviewer accepts them."],
-        ["/diseases", "Disease library", String(counts.diseases), "Cardiopulmonary entries written as teaching patterns, not as a description of every patient."],
-        ["/pharmacology", "Pharmacology", String(counts.medications), "Medication monographs. Doses are omitted."],
+        ["/atlas", "Atlas", String(counts.anatomyMeshes)],
+        ["/academy", "Academy", String(counts.lessons)],
+        ["/diseases", "Diseases", String(counts.diseases)],
+        ["/pharmacology", "Pharmacology", String(counts.medications)],
       ],
     },
     {
       title: "Practice",
       items: [
-        ["/reference", "Clinical reference", String(counts.referenceArticles), "Short references for people who already practice. No continuing-education credit is claimed."],
-        ["/simulations", "Simulations", String(counts.simulations), "Fictional cases with authored decisions. The engine does not predict a real outcome."],
-        ["/board-prep", "Board preparation", String(counts.questions), "Original questions aligned to the published NBRC outline. Lung Learn is not an NBRC product."],
-        ["/calculators", "Calculators", String(counts.calculators), "Educational formulas with units, limits, and references. A result is not an order."],
+        ["/calculators", "Calculators", String(counts.calculators)],
+        ["/board-prep", "Board prep", String(counts.questions)],
+        ["/simulations", "Simulations", String(counts.simulations)],
+        ["/reference", "Reference", String(counts.referenceArticles)],
       ],
     },
     {
       title: "Career",
       items: [
-        ["/explore", "Explore the career", String(counts.careerArticles), "What the work is, how people enter it, and what the Bureau of Labor Statistics reports."],
-        ["/schools", "Find a school", String(counts.schools), "Programs checked on the institution’s own site. CoARC’s directory is not republished here."],
-        ["/study", "Study desk", String(counts.flashcardSeeds), "Notes, bookmarks, and spaced-repetition cards kept with the account."],
-        ["/educators", "Educators", String(counts.lessons), "Classrooms and lesson outlines. The outlines are drafts, not an accredited curriculum."],
+        ["/explore", "Explore", String(counts.careerArticles)],
+        ["/schools", "Schools", String(counts.schools)],
+        ["/study", "Study desk", String(counts.flashcardSeeds)],
+        ["/educators", "Educators", String(counts.lessons)],
+        ["/pricing", "Pricing", ""],
       ],
     },
   ];
@@ -43,23 +44,22 @@ export default function HomePage() {
       <section className="wrap home">
         <header className="home-intro">
           <h1>Where do you want to start?</h1>
-            <p>The atlas, the lessons, and the formulas live in one library. Clinical lessons stay in draft until a named reviewer accepts them.</p>
+            <p>Study, practice, and career. Those three choices stay at the top of every page.</p>
           <p className="actions">
             <Link className="btn" href="/learn">Continue learning</Link>
             <Link className="btn-quiet" href="/atlas">Open the atlas</Link>
           </p>
         </header>
-        <div className="catalog-index">
+        <div className="home-map">
           {shelves.map((shelf) => (
             <section key={shelf.title}>
               <h2>{shelf.title}</h2>
               <ul>
-                {shelf.items.map(([href, title, count, note]) => (
+                {shelf.items.map(([href, title, count]) => (
                   <li key={href}>
                     <Link href={href}>
                       <span>{title}</span>
-                      <span className="count">{count}</span>
-                      <span className="note">{note}</span>
+                      {count ? <span className="count">{count}</span> : null}
                     </Link>
                   </li>
                 ))}

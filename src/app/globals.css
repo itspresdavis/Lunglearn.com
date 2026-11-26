@@ -129,8 +129,22 @@ a:hover { color: var(--accent); }
   padding: 0 0.7rem;
   border-bottom: 2px solid transparent;
 }
-.primary a[aria-current="page"] { color: #fff; border-bottom-color: #7eb0e4; }
+.primary a[aria-current] { color: #fff; border-bottom-color: #7eb0e4; }
 .primary a:hover { color: #fff; }
+.subnav { background: var(--bg-raise); border-bottom: 1px solid var(--line); color: var(--ink); }
+.subnav-row { display: flex; align-items: stretch; gap: 0.15rem; min-height: 2.7rem; overflow-x: auto; }
+.subnav a, .subnav a:visited {
+  display: flex;
+  align-items: center;
+  flex: none;
+  padding: 0 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+  border-bottom: 2px solid transparent;
+}
+.subnav a[aria-current="page"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.subnav a:hover { color: var(--accent); }
 .mobile-menu { display: none; background: var(--header); border-top: 1px solid var(--header-line); }
 .mobile-menu.open { display: none; }
 .mobile-menu a, .mobile-menu a:visited {
@@ -171,6 +185,29 @@ a:hover { color: var(--accent); }
 .home-intro .actions { margin-top: 1.35rem; }
 .home-intro .actions .btn-quiet { background: transparent; }
 
+.home-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem 2.5rem; margin-top: 2.4rem; }
+.home-map h2 {
+  margin: 0;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-map ul { list-style: none; margin: 0; padding: 0; }
+.home-map a {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.8rem 0.1rem;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  text-decoration: none;
+}
+.home-map a:hover { color: var(--accent); }
 .catalog-index { margin-top: 2.6rem; }
 .catalog-index section + section { margin-top: 1.6rem; }
 .catalog-index h2 {
@@ -384,7 +421,7 @@ footer.site a:hover { color: #fff; }
 .stack { display: grid; gap: 0.9rem; }
 
 @media (max-width: 900px) {
-  .grid-3, .grid-2, .atlas-layout, .plans, .foot { grid-template-columns: 1fr; }
+  .grid-3, .grid-2, .atlas-layout, .plans, .foot, .home-map { grid-template-columns: 1fr; }
   .catalog-index a, .filters { grid-template-columns: 1fr; }
   .catalog-index .note { grid-column: 1 / -1; }
   .rows a { flex-direction: column; gap: 0.15rem; align-items: flex-start; }
