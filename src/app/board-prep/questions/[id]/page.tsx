@@ -28,7 +28,7 @@ export default async function QuestionPage({ params }: { params: Promise<Params>
     return <section className="section wrap"><Locked title="Practice item" /></section>;
   }
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{question.topic}</p>
       <h1>Practice item</h1>
       <EditorialNote editorial={question.editorial} />

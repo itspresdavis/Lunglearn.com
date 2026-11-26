@@ -10,11 +10,13 @@ export default function PharmacologyPage() {
       <p className="kicker">Reference</p>
       <h1>Pharmacology</h1>
       <p className="lede">{medications.length} monographs. Doses are omitted. A class and a mechanism are not a prescription.</p>
-      <ul>
+      <ul className="rows">
         {medications.map((medication) => (
           <li key={medication.slug}>
-            <Link href={`/pharmacology/${medication.slug}`}>{medication.generic}</Link>
-            <span className="muted"> · {medication.className}</span>
+            <Link href={`/pharmacology/${medication.slug}`}>
+              <span className="row-title">{medication.generic}</span>
+              <span className="row-meta">{medication.className}</span>
+            </Link>
           </li>
         ))}
       </ul>

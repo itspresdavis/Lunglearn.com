@@ -25,19 +25,23 @@ export default function ExplorePage() {
         ))}
       </div>
       <h2>Guides</h2>
-      <ul>
+      <ul className="rows notes">
         {articles.map((article) => (
           <li key={article.slug}>
-            <Link href={`/explore/${article.slug}`}>{article.title}</Link>
-            <span className="muted"> — {article.description}</span>
+            <Link href={`/explore/${article.slug}`}>
+              <span className="row-title">{article.title}</span>
+              <span className="row-meta">{article.description}</span>
+            </Link>
           </li>
         ))}
       </ul>
       <h2>Practice settings</h2>
-      <ul>
+      <ul className="rows">
         {specialties.map((article) => (
           <li key={article.slug}>
-            <Link href={`/explore/specialties/${article.slug}`}>{article.title}</Link>
+            <Link href={`/explore/specialties/${article.slug}`}>
+              <span className="row-title">{article.title}</span>
+            </Link>
           </li>
         ))}
       </ul>

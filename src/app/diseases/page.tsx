@@ -14,11 +14,13 @@ export default function DiseasesPage() {
       {systems.map((system) => (
         <section key={system}>
           <h2>{system}</h2>
-          <ul>
+          <ul className="rows">
             {diseases.filter((disease) => disease.systems.includes(system)).map((disease) => (
               <li key={disease.slug}>
-                <Link href={`/diseases/${disease.slug}`}>{disease.title}</Link>
-                <span className="muted"> · {disease.categories.join(", ")}</span>
+                <Link href={`/diseases/${disease.slug}`}>
+                  <span className="row-title">{disease.title}</span>
+                  <span className="row-meta">{disease.categories.join(", ")}</span>
+                </Link>
               </li>
             ))}
           </ul>

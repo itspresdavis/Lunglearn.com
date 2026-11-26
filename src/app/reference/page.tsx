@@ -10,11 +10,13 @@ export default function ReferencePage() {
       <p className="kicker">Practice</p>
       <h1>Clinical reference</h1>
       <p className="lede">Short educational references for people who already practice. Lung Learn does not claim continuing-education credit.</p>
-      <ul>
+      <ul className="rows notes">
         {referenceArticles.map((article) => (
           <li key={article.slug}>
-            <Link href={`/reference/${article.slug}`}>{article.title}</Link>
-            <span className="muted"> — {article.description}</span>
+            <Link href={`/reference/${article.slug}`}>
+              <span className="row-title">{article.title}</span>
+              <span className="row-meta">{article.description}</span>
+            </Link>
           </li>
         ))}
       </ul>

@@ -17,7 +17,7 @@ export function SchoolFilters() {
   });
   return (
     <div>
-      <div className="toolbar">
+      <div className="filters">
         <label>
           State{" "}
           <select value={state} onChange={(event) => setState(event.target.value)}>

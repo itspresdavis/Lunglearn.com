@@ -3,7 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BookmarkButton, FlashcardButton } from "@/components/interactive";
 import { EditorialNote, References } from "@/components/prose";
+import { lessons } from "@/content/curriculum";
 import { diseases, getDisease } from "@/content/diseases";
+import { getAnatomy } from "@/content/anatomy";
+import { getMedication } from "@/content/medications";
 
 type Params = { slug: string };
 
@@ -23,12 +26,14 @@ export default async function DiseasePage({ params }: { params: Promise<Params> 
   const disease = getDisease(slug);
   if (!disease) notFound();
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{disease.categories.join(" · ")}</p>
       <h1>{disease.title}</h1>
       <EditorialNote editorial={disease.editorial} />
-      <BookmarkButton href={`/diseases/${disease.slug}`} title={disease.title} />
-      <FlashcardButton front={disease.title} back={disease.definition} sourceHref={`/diseases/${disease.slug}`} />
+      <p className="actions">
+        <BookmarkButton href={`/diseases/${disease.slug}`} title={disease.title} />
+        <FlashcardButton front={disease.title} back={disease.definition} sourceHref={`/diseases/${disease.slug}`} />
+      </p>
       <p>{disease.definition}</p>
       <h2>Epidemiology</h2>
       <p>{disease.epidemiology ?? "No incidence figure is stored. A number is not invented for this page."}</p>
@@ -61,10 +66,40 @@ export default async function DiseasePage({ params }: { params: Promise<Params> 
       <h2>Differential concepts</h2>
       <ul>{disease.differential.map((item) => <li key={item}>{item}</li>)}</ul>
       <h2>Connected records</h2>
-      <ul>
-        {disease.anatomy.map((item) => <li key={item}><Link href={`/atlas/${item}`}>Anatomy: {item}</Link></li>)}
-        {disease.medications.map((item) => <li key={item}><Link href={`/pharmacology/${item}`}>{item}</Link></li>)}
-        {disease.lessons.map((item) => <li key={item}><Link href={`/academy/gases-and-ventilation/${item}`}>{item}</Link></li>)}
+      <ul className="rows">
+        {disease.anatomy.map((item) => {
+          const record = getAnatomy(item);
+          return (
+            <li key={item}>
+              <Link href={`/atlas/${item}`}>
+                <span className="row-title">{record?.name ?? item}</span>
+                <span className="row-meta">Anatomy</span>
+              </Link>
+            </li>
+          );
+        })}
+        {disease.medications.map((item) => {
+          const medication = getMedication(item);
+          return (
+            <li key={item}>
+              <Link href={`/pharmacology/${item}`}>
+                <span className="row-title">{medication?.generic ?? item}</span>
+                <span className="row-meta">Pharmacology</span>
+              </Link>
+            </li>
+          );
+        })}
+        {disease.lessons.map((item) => {
+          const lesson = lessons.find((entry) => entry.slug === item);
+          return (
+            <li key={item}>
+              <Link href={lesson ? `/academy/${lesson.course}/${lesson.slug}` : `/academy/gases-and-ventilation/${item}`}>
+                <span className="row-title">{lesson?.title ?? item}</span>
+                <span className="row-meta">Lesson</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
       <p className="muted">There is no diseased 3D mesh for this condition. A color change on the healthy atlas would pretend to be pathology.</p>
       <References references={disease.references} />

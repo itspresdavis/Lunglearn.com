@@ -56,9 +56,11 @@ export default function HomePage() {
               <ul>
                 {shelf.items.map(([href, title, count, note]) => (
                   <li key={href}>
-                    <Link href={href}>{title}</Link>
-                    <span className="count">{count}</span>
-                    <span className="note">{note}</span>
+                    <Link href={href}>
+                      <span>{title}</span>
+                      <span className="count">{count}</span>
+                      <span className="note">{note}</span>
+                    </Link>
                   </li>
                 ))}
               </ul>

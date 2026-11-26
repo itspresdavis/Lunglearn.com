@@ -16,10 +16,11 @@ export default function AtlasPage() {
       <p className="lede">
         {anatomyManifest.structures} named meshes from the adult male BodyParts3D subset. {anatomyRecords.filter((record) => !record.mesh).length} additional records have no mesh and say so.
       </p>
-      <p>{anatomyManifest.attribution}</p>
+      <p className="muted">{anatomyManifest.attribution}</p>
       <AtlasViewer quiz />
-      <p>
-        <Link href="/atlas/physiology">Physiological diagrams</Link> · <Link href="/atlas/fma-7394">Trachea record</Link>
+      <p className="actions">
+        <Link className="btn-quiet" href="/atlas/physiology">Physiological diagrams</Link>
+        <Link className="btn-quiet" href="/atlas/fma-7394">Trachea record</Link>
       </p>
     </section>
   );

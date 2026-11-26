@@ -20,11 +20,13 @@ export default function BoardPage() {
         This library holds {questions.length} original questions and {practiceForms.length} short forms. Full-length mock examinations published: 0. Specialty banks for ACCS, NPS, PFT, and SDS are not written yet. The same question record can hold them later.
       </p>
       <h2>Forms</h2>
-      <ul>
+      <ul className="rows">
         {practiceForms.map((form) => (
           <li key={form.id}>
-            <Link href={`/board-prep/forms/${form.id}`}>{form.title}</Link>
-            <span className="muted"> · {form.access} · {form.minutes} minutes</span>
+            <Link href={`/board-prep/forms/${form.id}`}>
+              <span className="row-title">{form.title}</span>
+              <span className="row-meta">{form.access} · {form.minutes} minutes</span>
+            </Link>
           </li>
         ))}
       </ul>
@@ -32,11 +34,13 @@ export default function BoardPage() {
       {topics.map((topic) => (
         <section key={topic}>
           <h3>{topic}</h3>
-          <ul>
+          <ul className="rows notes">
             {questions.filter((question) => question.topic === topic).map((question) => (
               <li key={question.id}>
-                <Link href={`/board-prep/questions/${question.id}`}>{question.stem.slice(0, 110)}</Link>
-                <span className="muted"> · {question.difficulty} · {question.access}</span>
+                <Link href={`/board-prep/questions/${question.id}`}>
+                  <span className="row-title">{question.stem}</span>
+                  <span className="row-meta">{question.difficulty} · {question.access}</span>
+                </Link>
               </li>
             ))}
           </ul>

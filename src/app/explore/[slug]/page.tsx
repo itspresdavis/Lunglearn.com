@@ -24,7 +24,7 @@ export default async function CareerArticlePage({ params }: { params: Promise<Pa
   if (!article) notFound();
   const related = article.related.map((item) => getArticle(item)).filter((item) => item !== undefined);
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{article.kicker}</p>
       <h1>{article.title}</h1>
       <EditorialNote editorial={article.editorial} />

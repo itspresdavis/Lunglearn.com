@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Create an account", robots: { index:
 
 export default function SignUpPage() {
   return (
-    <section className="section wrap">
+    <section className="section wrap schema">
       <h1>Create an account</h1>
       <p>Use at least 10 characters. A new account is free until a subscription is actually paid.</p>
       <AuthForm mode="sign-up" />

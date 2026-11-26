@@ -28,7 +28,7 @@ export default async function SimulationPage({ params }: { params: Promise<Param
     return <section className="section wrap"><Locked title={simulation.title} /></section>;
   }
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{simulation.setting}</p>
       <h1>{simulation.title}</h1>
       <h2>Assumptions</h2>

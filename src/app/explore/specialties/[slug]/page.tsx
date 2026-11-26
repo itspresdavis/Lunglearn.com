@@ -22,7 +22,7 @@ export default async function SpecialtyPage({ params }: { params: Promise<Params
   const article = specialties.find((item) => item.slug === slug);
   if (!article) notFound();
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">Specialty</p>
       <h1>{article.title}</h1>
       <EditorialNote editorial={article.editorial} />

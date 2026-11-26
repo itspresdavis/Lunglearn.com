@@ -21,7 +21,7 @@ export default async function ReferenceArticlePage({ params }: { params: Promise
   const article = getReferenceArticle(slug);
   if (!article) notFound();
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <h1>{article.title}</h1>
       <EditorialNote editorial={article.editorial} />
       <Blocks blocks={article.blocks} />

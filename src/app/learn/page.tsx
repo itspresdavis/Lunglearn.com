@@ -37,13 +37,15 @@ export default async function LearnPage() {
       ) : (
         <p>You have opened every lesson on your list.</p>
       )}
-      <ul>
+      <ul className="rows">
         {lessons.map((lesson) => {
           const key = `${lesson.course}/${lesson.slug}`;
           return (
             <li key={key}>
-              <Link href={`/academy/${lesson.course}/${lesson.slug}`}>{lesson.title}</Link>
-              {done.has(key) ? <span className="muted"> · Done</span> : null}
+              <Link href={`/academy/${lesson.course}/${lesson.slug}`}>
+                <span className="row-title">{lesson.title}</span>
+                <span className="row-meta">{done.has(key) ? "Done" : "Not started"}</span>
+              </Link>
             </li>
           );
         })}

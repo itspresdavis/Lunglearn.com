@@ -20,7 +20,7 @@ export default async function SchoolPage({ params }: { params: Promise<Params> }
   const school = schools.find((item) => item.slug === slug);
   if (!school) notFound();
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{school.state}</p>
       <h1>{school.institution}</h1>
       <p className="lede">{school.program}</p>

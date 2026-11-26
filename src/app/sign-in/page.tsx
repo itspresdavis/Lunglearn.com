@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Sign in", robots: { index: false, fo
 
 export default function SignInPage() {
   return (
-    <section className="section wrap">
+    <section className="section wrap schema">
       <h1>Sign in</h1>
       <AuthForm mode="sign-in" />
       <p><Link href="/sign-up">Create an account</Link></p>

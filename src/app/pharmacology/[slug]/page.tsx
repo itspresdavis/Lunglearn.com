@@ -21,7 +21,7 @@ export default async function MedicationPage({ params }: { params: Promise<Param
   const medication = getMedication(slug);
   if (!medication) notFound();
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{medication.className}</p>
       <h1>{medication.generic}</h1>
       <EditorialNote editorial={medication.editorial} />

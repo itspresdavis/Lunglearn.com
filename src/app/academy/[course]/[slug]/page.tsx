@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Blocks, EditorialNote, Locked, References } from "@/components/prose";
 import { BookmarkButton, CompleteLessonButton, FlashcardButton } from "@/components/interactive";
+import { getAnatomy } from "@/content/anatomy";
 import { getLesson, lessons } from "@/content/curriculum";
 import { canAccess } from "@/lib/entitlements";
 import { currentSession } from "@/lib/session";
@@ -33,11 +34,13 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
     );
   }
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{lesson.level}</p>
       <h1>{lesson.title}</h1>
       <EditorialNote editorial={lesson.editorial} />
-      <BookmarkButton href={`/academy/${lesson.course}/${lesson.slug}`} title={lesson.title} />
+      <p className="actions">
+        <BookmarkButton href={`/academy/${lesson.course}/${lesson.slug}`} title={lesson.title} />
+      </p>
       <h2>Objectives</h2>
       <ul>{lesson.objectives.map((item) => <li key={item}>{item}</li>)}</ul>
       <Blocks blocks={lesson.blocks} />
@@ -71,12 +74,34 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
         </details>
       ))}
       <h2>Related</h2>
-      <ul>
-        {lesson.anatomy.map((item) => <li key={item}><Link href={`/atlas/${item}`}>{item}</Link></li>)}
-        {lesson.related.map((item) => <li key={item}><Link href={`/academy/${lesson.course}/${item}`}>{item}</Link></li>)}
+      <ul className="rows">
+        {lesson.anatomy.map((item) => {
+          const record = getAnatomy(item);
+          return (
+            <li key={item}>
+              <Link href={`/atlas/${item}`}>
+                <span className="row-title">{record?.name ?? item}</span>
+                <span className="row-meta">Anatomy</span>
+              </Link>
+            </li>
+          );
+        })}
+        {lesson.related.map((item) => {
+          const related = getLesson(lesson.course, item);
+          return (
+            <li key={item}>
+              <Link href={`/academy/${lesson.course}/${item}`}>
+                <span className="row-title">{related?.title ?? item}</span>
+                <span className="row-meta">Lesson</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
       <References references={lesson.references} />
-      <CompleteLessonButton slug={`${lesson.course}/${lesson.slug}`} />
+      <p className="actions">
+        <CompleteLessonButton slug={`${lesson.course}/${lesson.slug}`} />
+      </p>
     </article>
   );
 }

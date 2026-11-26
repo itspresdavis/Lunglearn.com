@@ -10,11 +10,13 @@ export default function SimulationsPage() {
       <p className="kicker">Laboratory</p>
       <h1>Clinical simulations</h1>
       <p className="lede">Fictional patients and authored decisions. The engine changes the case’s teaching values. It does not predict a real outcome.</p>
-      <ul>
+      <ul className="rows">
         {simulations.map((simulation) => (
           <li key={simulation.id}>
-            <Link href={`/simulations/${simulation.id}`}>{simulation.title}</Link>
-            <span className="muted"> · {simulation.access} · {simulation.minutes} min</span>
+            <Link href={`/simulations/${simulation.id}`}>
+              <span className="row-title">{simulation.title}</span>
+              <span className="row-meta">{simulation.access} · {simulation.minutes} min</span>
+            </Link>
           </li>
         ))}
       </ul>

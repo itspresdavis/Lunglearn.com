@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function PhysiologyPage() {
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">Schematic</p>
       <h1>Physiological diagrams</h1>
       <div className="banner">These drawings simplify physiology. They are not measurements, and they are not a substitute for a reviewed animation of a real dataset.</div>

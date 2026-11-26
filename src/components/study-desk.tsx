@@ -42,7 +42,7 @@ export function StudyDesk() {
   const days = examDate ? Math.ceil((Date.parse(examDate) - Date.now()) / 86_400_000) : null;
 
   return (
-    <div className="grid">
+    <div className="grid grid-2">
       {error ? <p className="banner">{error}</p> : null}
       <section className="card">
         <h2>Today</h2>

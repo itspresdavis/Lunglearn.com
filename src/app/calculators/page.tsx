@@ -14,11 +14,13 @@ export default function CalculatorsPage() {
       <p className="kicker">Tools</p>
       <h1>Calculators</h1>
       <p className="lede">{calculators.length} educational calculators. Each one shows its formula and refuses to write an order.</p>
-      <ul>
+      <ul className="rows">
         {calculators.map((calculator) => (
           <li key={calculator.slug}>
-            <Link href={`/calculators/${calculator.slug}`}>{calculator.title}</Link>
-            <span className="muted"> · {calculatorIsFree(calculator.slug) ? "free" : "individual library"}</span>
+            <Link href={`/calculators/${calculator.slug}`}>
+              <span className="row-title">{calculator.title}</span>
+              <span className="row-meta">{calculatorIsFree(calculator.slug) ? "Free" : "Individual library"}</span>
+            </Link>
           </li>
         ))}
       </ul>

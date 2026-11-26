@@ -492,11 +492,13 @@ export function AtlasViewer({ highlight, quiz = false }: { highlight?: string; q
       <section>
         <h2>Selection</h2>
         {selectedRecords.length === 0 ? <p>Select a mesh to open its record.</p> : null}
-        <ul>
+        <ul className="rows">
           {selectedRecords.map((mesh) => (
             <li key={mesh.mesh}>
-              <Link href={`/atlas/${mesh.id}`}>{mesh.name}</Link>
-              <span className="muted"> · {mesh.layers.join(", ")} · {mesh.triangles.toLocaleString("en-US")} triangles</span>
+              <Link href={`/atlas/${mesh.id}`}>
+                <span className="row-title">{mesh.name}</span>
+                <span className="row-meta">{mesh.layers.join(", ")} · {mesh.triangles.toLocaleString("en-US")} triangles</span>
+              </Link>
             </li>
           ))}
         </ul>

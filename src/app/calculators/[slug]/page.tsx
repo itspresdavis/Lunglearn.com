@@ -34,7 +34,7 @@ export default async function CalculatorPage({ params }: { params: Promise<Param
     return <section className="section wrap"><Locked title={calculator.title} /></section>;
   }
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">Educational calculator</p>
       <h1>{calculator.title}</h1>
       <EditorialNote editorial={calculator.editorial} />

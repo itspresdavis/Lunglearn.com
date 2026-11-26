@@ -46,7 +46,7 @@ export default async function AnatomyPage({ params }: { params: Promise<Params> 
     ["Respiratory therapy relevance", record.respiratoryRelevance],
   ];
   return (
-    <article className="section wrap">
+    <article className="section wrap reading">
       <p className="kicker">{record.system}</p>
       <h1>{record.name}</h1>
       <EditorialNote editorial={record.editorial} />

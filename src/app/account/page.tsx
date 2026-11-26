@@ -19,8 +19,11 @@ export default async function AccountPage() {
   return (
     <section className="section wrap">
       <h1>Account</h1>
-      <p>{session.user.email}</p>
-      <p>Role: {session.user.role}. Authenticator: {session.user.mfaEnabled ? "on" : "off"}.</p>
+      <dl className="facts">
+        <div><dt>Email</dt><dd>{session.user.email}</dd></div>
+        <div><dt>Role</dt><dd>{session.user.role}</dd></div>
+        <div><dt>Authenticator</dt><dd>{session.user.mfaEnabled ? "On" : "Off"}</dd></div>
+      </dl>
       <SignOutButton />
       <p>
         <Link href="/account/billing">Billing</Link> · <Link href="/account/verification">Student verification</Link>

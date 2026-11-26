@@ -22,14 +22,14 @@ export default async function BillingPage() {
     <section className="section wrap">
       <h1>Billing</h1>
       {subscription ? (
-        <ul>
-          <li>Plan field: {subscription.plan}</li>
-          <li>Status: {subscription.status}</li>
-          <li>Price on the record: ${(subscription.priceCents / 100).toFixed(2)}</li>
-          <li>Verification: {subscription.verificationStatus}</li>
-          <li>Period ends: {subscription.periodEndsAt ?? "no open period"}</li>
-          <li>Standard-price consent: {subscription.standardPriceConsentAt ?? "not given"}</li>
-        </ul>
+        <dl className="facts">
+          <div><dt>Plan</dt><dd>{subscription.plan}</dd></div>
+          <div><dt>Status</dt><dd>{subscription.status}</dd></div>
+          <div><dt>Price on the record</dt><dd>${(subscription.priceCents / 100).toFixed(2)}</dd></div>
+          <div><dt>Verification</dt><dd>{subscription.verificationStatus}</dd></div>
+          <div><dt>Period ends</dt><dd>{subscription.periodEndsAt ?? "No open period"}</dd></div>
+          <div><dt>Standard-price consent</dt><dd>{subscription.standardPriceConsentAt ?? "Not given"}</dd></div>
+        </dl>
       ) : <p>No subscription record.</p>}
       {decision ? <p>If renewal were evaluated today: {decision.action}, at ${(decision.priceCents / 100).toFixed(2)}. {decision.reason}</p> : null}
       <PortalButton />

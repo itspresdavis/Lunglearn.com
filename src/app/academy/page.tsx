@@ -14,11 +14,13 @@ export default function AcademyPage() {
         <section key={course.slug}>
           <h2>{course.title}</h2>
           <p>{course.summary}</p>
-          <ul>
+          <ul className="rows">
             {lessonsIn(course.slug).map((lesson) => (
               <li key={lesson.slug}>
-                <Link href={`/academy/${course.slug}/${lesson.slug}`}>{lesson.title}</Link>
-                <span className="muted"> · {lesson.level} · {lesson.minutes} min · {lesson.access}</span>
+                <Link href={`/academy/${course.slug}/${lesson.slug}`}>
+                  <span className="row-title">{lesson.title}</span>
+                  <span className="row-meta">{lesson.level} · {lesson.minutes} min · {lesson.access}</span>
+                </Link>
               </li>
             ))}
           </ul>
