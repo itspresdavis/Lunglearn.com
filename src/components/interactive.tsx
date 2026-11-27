@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { safeNext } from "@/lib/http";
 import { interpretAcidBase } from "@/lib/acid-base";
 import * as formulas from "@/lib/calculators";
 import type { CalcResult } from "@/lib/calculators";
@@ -300,26 +301,60 @@ async function postJson(url: string, body: unknown) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(body),
   });
-  const data = (await response.json().catch(() => ({}))) as { error?: string; ok?: boolean };
-  return { ok: response.ok, error: data.error };
+  const data = (await response.json().catch(() => ({}))) as { error?: string; ok?: boolean; mfaRequired?: boolean; challenge?: string };
+  return { ok: response.ok, error: data.error, mfaRequired: data.mfaRequired, challenge: data.challenge };
 }
 
-export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
+export function AuthForm({ mode, next }: { mode: "sign-in" | "sign-up"; next?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [challenge, setChallenge] = useState("");
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const destination = safeNext(mode === "sign-in" ? next : "/learn");
+  if (challenge) {
+    return (
+      <form
+        className="card"
+        onSubmit={async (event) => {
+          event.preventDefault();
+          const result = await postJson("/api/auth/login", { challenge, code });
+          if (!result.ok) {
+            setError(result.error || "That code was not accepted.");
+            return;
+          }
+          router.push(destination);
+          router.refresh();
+        }}
+      >
+        <label className="field">
+          Authenticator code
+          <input value={code} onChange={(event) => setCode(event.target.value)} inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" required />
+        </label>
+        {error ? <p className="banner">{error}</p> : null}
+        <button className="btn" type="submit">
+          Confirm code
+        </button>
+      </form>
+    );
+  }
   return (
     <form
       className="card"
       onSubmit={async (event) => {
         event.preventDefault();
         const result = await postJson(mode === "sign-in" ? "/api/auth/login" : "/api/auth/register", { email, password });
+        if (result.mfaRequired && result.challenge) {
+          setChallenge(result.challenge);
+          setError("");
+          return;
+        }
         if (!result.ok) {
           setError(result.error || "The request failed.");
           return;
         }
-        router.push("/learn");
+        router.push(destination);
         router.refresh();
       }}
     >

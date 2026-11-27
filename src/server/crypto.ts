@@ -21,6 +21,16 @@ export function newToken(): string {
   return randomBytes(32).toString("hex");
 }
 
+export function randomSecret(bytes = 20): Buffer {
+  return randomBytes(bytes);
+}
+
+const DUMMY_PASSWORD_HASH = `${"0".repeat(32)}:${"0".repeat(64)}`;
+
+export function dummyPasswordHash(): string {
+  return DUMMY_PASSWORD_HASH;
+}
+
 export function hashPassword(password: string): string {
   const salt = randomBytes(16).toString("hex");
   const hash = scryptSync(password, salt, 32).toString("hex");

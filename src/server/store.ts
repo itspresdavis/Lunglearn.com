@@ -2,10 +2,12 @@ import fs from "fs";
 import path from "path";
 import {
   decryptBytes,
+  dummyPasswordHash,
   encryptBytes,
   hashPassword,
   hashToken,
   newToken,
+  randomSecret,
   redactSensitive,
   sniffUpload,
   verifyPassword,
@@ -21,6 +23,7 @@ export type User = {
   passwordHash: string;
   role: Role;
   mfaSecret: string | null;
+  mfaPendingSecret: string | null;
   mfaEnabled: boolean;
   createdAt: string;
 };
@@ -31,6 +34,7 @@ export type Session = {
   tokenHash: string;
   expiresAt: string;
   mfaUntil: string | null;
+  mfaPending?: boolean;
 };
 
 export type Subscription = {
@@ -142,7 +146,12 @@ export class Store {
   }
 
   private read(): Database {
-    return JSON.parse(fs.readFileSync(this.file, "utf8")) as Database;
+    const parsed = JSON.parse(fs.readFileSync(this.file, "utf8")) as Database;
+    const base = empty();
+    for (const key of Object.keys(base) as (keyof Database)[]) {
+      if (!Array.isArray(parsed[key])) parsed[key] = base[key] as never;
+    }
+    return parsed;
   }
 
   private write(db: Database) {
@@ -172,20 +181,35 @@ export class Store {
     return allowed;
   }
 
-  private limit(db: Database, key: string, max: number, windowMs: number, now: number) {
-    db.rates = db.rates.filter((rate) => now - Date.parse(rate.at) < windowMs);
-    const count = db.rates.filter((rate) => rate.key === key).length;
-    if (count >= max) return false;
+  private rateCount(db: Database, key: string, windowMs: number, now: number) {
+    db.rates = db.rates.filter((rate) => now - Date.parse(rate.at) < 24 * 60 * 60 * 1000);
+    return db.rates.filter((rate) => rate.key === key && now - Date.parse(rate.at) < windowMs).length;
+  }
+
+  private markRate(db: Database, key: string, now: number) {
     db.rates.push({ key, at: new Date(now).toISOString() });
+  }
+
+  private limit(db: Database, key: string, max: number, windowMs: number, now: number) {
+    if (this.rateCount(db, key, windowMs, now) >= max) return false;
+    this.markRate(db, key, now);
     return true;
   }
 
-  register(input: { email: string; password: string; now?: string }) {
+  register(input: { email: string; password: string; now?: string; ip?: string }) {
     const email = input.email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email address." as const };
     if (input.password.length < 10) return { error: "Use at least 10 characters." as const };
     const db = this.read();
-    if (db.users.some((user) => user.email === email)) return { error: "An account with that email already exists." as const };
+    const now = input.now ? Date.parse(input.now) : Date.now();
+    if (input.ip && !this.limit(db, `register:${input.ip}`, 5, 60 * 60 * 1000, now)) {
+      this.write(db);
+      return { error: "Too many new accounts from this network. Wait and try again." as const, status: 429 as const };
+    }
+    if (db.users.some((user) => user.email === email)) {
+      if (input.ip) this.write(db);
+      return { error: "An account with that email already exists." as const };
+    }
     const admins = (process.env.ADMIN_EMAILS ?? "")
       .split(",")
       .map((item) => item.trim().toLowerCase())
@@ -196,6 +220,7 @@ export class Store {
       passwordHash: hashPassword(input.password),
       role: admins.includes(email) ? "admin" : "learner",
       mfaSecret: null,
+      mfaPendingSecret: null,
       mfaEnabled: false,
       createdAt: input.now ?? new Date().toISOString(),
     };
@@ -220,15 +245,31 @@ export class Store {
   login(input: { email: string; password: string; ip: string; now?: number }) {
     const now = input.now ?? Date.now();
     const db = this.read();
-    if (!this.limit(db, `login:${input.ip}`, 10, 15 * 60 * 1000, now)) {
+    if (this.rateCount(db, `login:${input.ip}`, 15 * 60 * 1000, now) >= 10) {
       this.write(db);
-      return { error: "Too many sign-in attempts. Wait and try again." as const };
+      return { error: "Too many sign-in attempts. Wait and try again." as const, status: 429 as const };
     }
     const user = db.users.find((candidate) => candidate.email === input.email.trim().toLowerCase());
-    if (!user || !verifyPassword(input.password, user.passwordHash)) {
+    const passwordOk = verifyPassword(input.password, user?.passwordHash ?? dummyPasswordHash());
+    if (!user || !passwordOk) {
+      this.markRate(db, `login:${input.ip}`, now);
       this.audit(db, null, "login_failed", "rejected credentials");
       this.write(db);
       return { error: "Email or password is incorrect." as const };
+    }
+    if (user.mfaEnabled && user.mfaSecret) {
+      const challenge = newToken();
+      db.sessions.push({
+        id: this.id(),
+        userId: user.id,
+        tokenHash: hashToken(challenge),
+        expiresAt: new Date(now + 5 * 60 * 1000).toISOString(),
+        mfaUntil: null,
+        mfaPending: true,
+      });
+      this.audit(db, user.id, "login_mfa_challenge", `user ${user.id}`);
+      this.write(db);
+      return { mfaRequired: true as const, challenge };
     }
     const token = newToken();
     db.sessions.push({
@@ -252,20 +293,53 @@ export class Store {
 
   userForToken(token: string, now = Date.now()) {
     const db = this.read();
+    const sessionsBefore = db.sessions.length;
+    const tokensBefore = db.fileTokens.length;
+    db.sessions = db.sessions.filter((session) => Date.parse(session.expiresAt) >= now);
+    db.fileTokens = db.fileTokens.filter((item) => Date.parse(item.expiresAt) >= now);
+    if (db.sessions.length !== sessionsBefore || db.fileTokens.length !== tokensBefore) this.write(db);
     const session = db.sessions.find((candidate) => candidate.tokenHash === hashToken(token));
-    if (!session || Date.parse(session.expiresAt) < now) return null;
+    if (!session || session.mfaPending) return null;
     const user = db.users.find((candidate) => candidate.id === session.userId);
     if (!user) return null;
     return { user: publicUser(user), mfa: session.mfaUntil !== null && Date.parse(session.mfaUntil) > now };
+  }
+
+  completeMfaLogin(input: { challenge: string; code: string; ip: string; now?: number }) {
+    const now = input.now ?? Date.now();
+    const db = this.read();
+    if (this.rateCount(db, `login:${input.ip}`, 15 * 60 * 1000, now) >= 10) {
+      this.write(db);
+      return { error: "Too many sign-in attempts. Wait and try again." as const, status: 429 as const };
+    }
+    const session = db.sessions.find((candidate) => candidate.tokenHash === hashToken(input.challenge));
+    const user = session ? db.users.find((candidate) => candidate.id === session.userId) : undefined;
+    if (!session?.mfaPending || Date.parse(session.expiresAt) < now || !user?.mfaSecret) {
+      this.markRate(db, `login:${input.ip}`, now);
+      this.write(db);
+      return { error: "That sign-in challenge expired. Sign in again." as const };
+    }
+    const secret = decryptBytes(Buffer.from(user.mfaSecret, "base64"));
+    if (!verifyTotp(secret, input.code, now)) {
+      this.markRate(db, `login:${input.ip}`, now);
+      this.audit(db, user.id, "login_failed", "rejected authenticator code");
+      this.write(db);
+      return { error: "That code is not valid." as const };
+    }
+    session.mfaPending = false;
+    session.mfaUntil = new Date(now + 12 * 60 * 60 * 1000).toISOString();
+    session.expiresAt = new Date(now + 14 * 24 * 60 * 60 * 1000).toISOString();
+    this.audit(db, user.id, "login", `session for ${user.id}`);
+    this.write(db);
+    return { token: input.challenge, user: publicUser(user) };
   }
 
   beginMfa(userId: string) {
     const db = this.read();
     const user = db.users.find((candidate) => candidate.id === userId);
     if (!user) return { error: "Account not found." as const };
-    const secret = Buffer.from(newToken().slice(0, 20));
-    user.mfaSecret = encryptBytes(secret).toString("base64");
-    user.mfaEnabled = false;
+    const secret = randomSecret(20);
+    user.mfaPendingSecret = encryptBytes(secret).toString("base64");
     this.write(db);
     const label = encodeURIComponent(user.email);
     return { otpauth: `otpauth://totp/Lung%20Learn:${label}?secret=${base32Encode(secret)}&issuer=Lung%20Learn&digits=6&period=30` };
@@ -274,9 +348,11 @@ export class Store {
   confirmMfa(userId: string, token: string, sessionToken: string, now = Date.now()) {
     const db = this.read();
     const user = db.users.find((candidate) => candidate.id === userId);
-    if (!user?.mfaSecret) return { error: "Set up an authenticator before confirming." as const };
-    const secret = decryptBytes(Buffer.from(user.mfaSecret, "base64"));
+    if (!user?.mfaPendingSecret) return { error: "Set up an authenticator before confirming." as const };
+    const secret = decryptBytes(Buffer.from(user.mfaPendingSecret, "base64"));
     if (!verifyTotp(secret, token, now)) return { error: "That code is not valid." as const };
+    user.mfaSecret = user.mfaPendingSecret;
+    user.mfaPendingSecret = null;
     user.mfaEnabled = true;
     const session = db.sessions.find((candidate) => candidate.tokenHash === hashToken(sessionToken));
     if (session) session.mfaUntil = new Date(now + 12 * 60 * 60 * 1000).toISOString();

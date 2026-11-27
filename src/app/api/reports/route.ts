@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sameOrigin } from "@/lib/http";
+import { clientIp, sameOrigin } from "@/lib/http";
 import { currentSession } from "@/lib/session";
 import { getStore } from "@/server/store";
 
@@ -10,6 +10,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Name the page and describe the problem in a sentence." }, { status: 400 });
   }
   const session = await currentSession();
-  getStore().addReport({ href: body.href.slice(0, 300), message: body.message.slice(0, 4000), userId: session?.user.id ?? null });
+  const store = getStore();
+  if (!store.consumeRate(`report:${clientIp(request)}`, 8, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Too many reports from this network. Wait and try again." }, { status: 429 });
+  }
+  store.addReport({ href: body.href.slice(0, 300), message: body.message.slice(0, 4000), userId: session?.user.id ?? null });
   return NextResponse.json({ ok: true });
 }

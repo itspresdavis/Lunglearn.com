@@ -8,7 +8,9 @@ export async function POST(request: Request) {
   const session = await currentSession();
   if (!session || session.user.role !== "admin") return NextResponse.json({ error: "Admin access required." }, { status: 403 });
   const body = (await request.json().catch(() => null)) as { category?: string; cents?: number; note?: string; actual?: boolean } | null;
-  if (!body?.category || typeof body.cents !== "number") return NextResponse.json({ error: "Category and cents are required." }, { status: 400 });
+  if (!body?.category || typeof body.cents !== "number" || !Number.isFinite(body.cents) || body.cents < 0 || body.cents > 100_000_000_00) {
+    return NextResponse.json({ error: "Category and a real amount in cents are required." }, { status: 400 });
+  }
   getStore().setExpense(body.category.slice(0, 80), Math.round(body.cents), (body.note ?? "").slice(0, 300), Boolean(body.actual));
   return NextResponse.json({ ok: true });
 }

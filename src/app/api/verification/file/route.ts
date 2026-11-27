@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sameOrigin } from "@/lib/http";
 import { currentSession } from "@/lib/session";
+import { sniffUpload } from "@/server/crypto";
 import { getStore } from "@/server/store";
 
 export async function POST(request: Request) {
@@ -22,12 +23,15 @@ export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get("token") ?? "";
   const file = getStore().readVerificationFile(token);
   if ("error" in file) return NextResponse.json({ error: file.error }, { status: 403 });
-  const kind = file.bytes[0] === 0x25 ? "application/pdf" : file.bytes[0] === 0x89 ? "image/png" : "image/jpeg";
+  const sniffed = sniffUpload(file.bytes);
+  if (!sniffed) return NextResponse.json({ error: "The file is not a JPEG, PNG, or PDF." }, { status: 403 });
+  const type = sniffed === "pdf" ? "application/pdf" : sniffed === "png" ? "image/png" : "image/jpeg";
   return new NextResponse(Buffer.from(file.bytes), {
     headers: {
-      "content-type": kind,
+      "content-type": type,
       "cache-control": "no-store",
-      "content-disposition": "inline",
+      "content-disposition": `attachment; filename="verification.${sniffed === "jpeg" ? "jpg" : sniffed}"`,
+      "x-content-type-options": "nosniff",
     },
   });
 }

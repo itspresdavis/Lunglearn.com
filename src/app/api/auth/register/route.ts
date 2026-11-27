@@ -8,10 +8,13 @@ export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as { email?: string; password?: string } | null;
   if (!body?.email || !body.password) return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
   const store = getStore();
-  const created = store.register({ email: body.email, password: body.password });
-  if ("error" in created) return NextResponse.json({ error: created.error }, { status: 400 });
+  const created = store.register({ email: body.email, password: body.password, ip: clientIp(request) });
+  if ("error" in created) return NextResponse.json({ error: created.error }, { status: "status" in created ? created.status : 400 });
   const session = store.login({ email: body.email, password: body.password, ip: clientIp(request) });
-  if ("error" in session) return NextResponse.json({ error: session.error }, { status: 400 });
+  if (!("token" in session) || !session.token) {
+    const message = "error" in session ? session.error : "The account was created, but sign-in did not start.";
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
   const response = NextResponse.json({ ok: true });
   response.cookies.set(SESSION_COOKIE, session.token, sessionCookieOptions());
   return response;

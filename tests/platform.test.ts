@@ -37,7 +37,7 @@ import { reviewCard, startingCard } from "@/lib/srs";
 import { patchFromStripeEvent } from "@/lib/stripe-billing";
 import { simulations } from "@/content/simulation-cases";
 import { calculators } from "@/content/tools";
-import { sniffUpload, redactSensitive } from "@/server/crypto";
+import { decryptBytes, hotp, sniffUpload, redactSensitive } from "@/server/crypto";
 import { Store } from "@/server/store";
 
 describe("formulas", () => {
@@ -251,6 +251,54 @@ describe("verification privacy", () => {
     const fresh = store.issueFileToken({ reviewerId, verificationId, mfa: false });
     expect("error" in fresh).toBe(true);
     expect(redactSensitive("verification/abc.bin and AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==")).not.toContain("AAAA");
+  });
+});
+
+describe("sign-in protections", () => {
+  it("does not let a short rate window erase a longer one", () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "ll-rate-"));
+    const store = new Store(directory);
+    const now = Date.parse("2026-11-23T12:00:00.000Z");
+    expect(store.consumeRate("tutor:person", 1, 60 * 60 * 1000, now - 20 * 60 * 1000)).toBe(true);
+    store.login({ email: "nobody@example.com", password: "wrong-password", ip: "198.51.100.8", now });
+    expect(store.consumeRate("tutor:person", 1, 60 * 60 * 1000, now)).toBe(false);
+  });
+
+  it("withholds a session until the authenticator code matches", () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "ll-mfa-"));
+    const store = new Store(directory);
+    const created = store.register({ email: "mfa@example.edu", password: "long-password" });
+    expect("user" in created).toBe(true);
+    if (!("user" in created) || !created.user) return;
+    const first = store.login({ email: "mfa@example.edu", password: "long-password", ip: "198.51.100.9" });
+    expect("token" in first).toBe(true);
+    if (!("token" in first) || !first.token) return;
+    const started = store.beginMfa(created.user.id);
+    expect("otpauth" in started).toBe(true);
+    const database = JSON.parse(fs.readFileSync(path.join(directory, "db.json"), "utf8")) as {
+      users: { mfaPendingSecret: string | null; mfaSecret: string | null; mfaEnabled: boolean }[];
+    };
+    const pending = database.users[0]?.mfaPendingSecret;
+    expect(pending).toBeTruthy();
+    if (!pending) return;
+    const now = Date.now();
+    const code = hotp(decryptBytes(Buffer.from(pending, "base64")), Math.floor(now / 30_000));
+    expect(store.confirmMfa(created.user.id, code, first.token, now)).toMatchObject({ ok: true });
+    const saved = JSON.parse(fs.readFileSync(path.join(directory, "db.json"), "utf8")) as { users: { mfaSecret: string | null; mfaEnabled: boolean }[] };
+    const secret = saved.users[0]?.mfaSecret;
+    store.beginMfa(created.user.id);
+    const after = JSON.parse(fs.readFileSync(path.join(directory, "db.json"), "utf8")) as { users: { mfaSecret: string | null; mfaEnabled: boolean }[] };
+    expect(after.users[0]?.mfaEnabled).toBe(true);
+    expect(after.users[0]?.mfaSecret).toBe(secret);
+    const challenged = store.login({ email: "mfa@example.edu", password: "long-password", ip: "198.51.100.9", now });
+    expect(challenged).toMatchObject({ mfaRequired: true });
+    if (!("challenge" in challenged) || !challenged.challenge) return;
+    expect(store.userForToken(challenged.challenge, now)).toBeNull();
+    const wrongCode = code === "000000" ? "000001" : "000000";
+    expect("error" in store.completeMfaLogin({ challenge: challenged.challenge, code: wrongCode, ip: "198.51.100.9", now })).toBe(true);
+    const signedIn = store.completeMfaLogin({ challenge: challenged.challenge, code, ip: "198.51.100.9", now });
+    expect(signedIn).toMatchObject({ token: challenged.challenge });
+    expect(store.userForToken(challenged.challenge, now)?.mfa).toBe(true);
   });
 });
 

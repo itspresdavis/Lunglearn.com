@@ -206,7 +206,7 @@ export function MfaPanel() {
 
 export function EducatorPanel() {
   const [message, setMessage] = useState("");
-  const [rooms, setRooms] = useState<{ id: string; name: string; code: string; enrollments: number; assignments: { title: string; href: string }[] }[]>([]);
+  const [rooms, setRooms] = useState<{ id: string; name: string; code?: string; enrollments: number; assignments: { title: string; href: string }[] }[]>([]);
   async function load() {
     const response = await fetch("/api/educators");
     if (!response.ok) {
@@ -309,7 +309,8 @@ export function EducatorPanel() {
       <ul>
         {rooms.map((room) => (
           <li key={room.id}>
-            {room.name} · code {room.code} · {room.enrollments} people · id {room.id}
+            {room.name}
+            {room.code ? ` · code ${room.code}` : ""} · {room.enrollments} people · id {room.id}
             <ul>
               {room.assignments.map((assignment) => (
                 <li key={assignment.href}>

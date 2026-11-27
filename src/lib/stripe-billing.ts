@@ -62,7 +62,6 @@ export function patchFromStripeEvent(event: Stripe.Event): BillingPatch | null {
             : subscription.status === "canceled"
               ? "canceled"
               : "incomplete";
-    const periodEnd = subscription.items.data[0] ? null : null;
     const endSeconds = (subscription as Stripe.Subscription & { current_period_end?: number }).current_period_end;
     return {
       userId,
@@ -71,7 +70,7 @@ export function patchFromStripeEvent(event: Stripe.Event): BillingPatch | null {
       priceCents: plan ? centsFromPrice(price, PLANS[plan].monthlyCents) : price ?? undefined,
       customerId: typeof subscription.customer === "string" ? subscription.customer : subscription.customer?.id,
       subscriptionId: subscription.id,
-      periodEndsAt: endSeconds ? new Date(endSeconds * 1000).toISOString() : periodEnd,
+      periodEndsAt: endSeconds ? new Date(endSeconds * 1000).toISOString() : null,
     };
   }
   if (event.type === "invoice.payment_failed") {

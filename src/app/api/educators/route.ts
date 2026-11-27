@@ -10,7 +10,9 @@ export async function GET() {
   const classrooms = store.classroomsFor(session.user.id);
   return NextResponse.json({
     classrooms: classrooms.map((room) => ({
-      ...room,
+      id: room.id,
+      name: room.name,
+      code: room.ownerId === session.user.id ? room.code : undefined,
       assignments: store.assignmentsForClassroom(room.id),
       enrollments: store.enrollmentsFor(room.id).length,
     })),
