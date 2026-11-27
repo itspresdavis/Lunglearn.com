@@ -353,6 +353,20 @@ summary:hover { color: var(--accent); }
 }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); outline: none; }
 .checks { display: flex; flex-direction: column; gap: 0.35rem; }
+.lesson-check {
+  margin: 0 0 0.9rem;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-raise);
+}
+.lesson-check legend { font-family: var(--sans); font-weight: 600; padding: 0 0.15rem; }
+.lesson-check-options { display: flex; flex-direction: column; align-items: flex-start; gap: 0.4rem; margin: 0.7rem 0 0.35rem; }
+.lesson-check .btn-quiet { text-align: left; }
+.lesson-check .btn-quiet[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg-raise)); }
+.reading .myths, .myths { list-style: none; padding-left: 0; }
+.myths li { display: grid; gap: 0.2rem; margin: 0.85rem 0; }
+.myths strong { font-family: var(--sans); font-size: 1rem; }
 .atlas-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 0.8fr); gap: 1.25rem; align-items: start; }
 .viewport {
   position: relative;

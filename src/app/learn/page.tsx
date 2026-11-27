@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SignOutButton } from "@/components/account-panels";
-import { lessons } from "@/content/curriculum";
+import { coursePlace, getCourse, lessons } from "@/content/curriculum";
 import { currentSession } from "@/lib/session";
 import { getStore } from "@/server/store";
 
@@ -40,11 +40,14 @@ export default async function LearnPage() {
       <ul className="rows">
         {lessons.map((lesson) => {
           const key = `${lesson.course}/${lesson.slug}`;
+          const place = coursePlace(lesson);
           return (
             <li key={key}>
               <Link href={`/academy/${lesson.course}/${lesson.slug}`}>
                 <span className="row-title">{lesson.title}</span>
-                <span className="row-meta">{done.has(key) ? "Done" : "Not started"}</span>
+                <span className="row-meta">
+                  {getCourse(lesson.course)?.title} · {place.index + 1} of {place.total} · {done.has(key) ? "Done" : "Not started"}
+                </span>
               </Link>
             </li>
           );

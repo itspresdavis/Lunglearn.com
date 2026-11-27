@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { lessons } from "@/content/curriculum";
+import { lessonByKey } from "@/content/curriculum";
 import { sameOrigin } from "@/lib/http";
 import { reviewCard, type ReviewGrade } from "@/lib/srs";
 import { currentSession } from "@/lib/session";
@@ -62,8 +62,7 @@ export async function POST(request: Request) {
   }
   if (body?.action === "complete" && body.lessonSlug) {
     const lessonSlug = body.lessonSlug.slice(0, 120);
-    const known = lessons.some((lesson) => `${lesson.course}/${lesson.slug}` === lessonSlug);
-    if (!known) return NextResponse.json({ error: "That lesson is not in the academy." }, { status: 400 });
+    if (!lessonByKey(lessonSlug)) return NextResponse.json({ error: "That lesson is not in the academy." }, { status: 400 });
     store.completeLesson(session.user.id, lessonSlug);
     return NextResponse.json({ ok: true });
   }

@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Blocks, EditorialNote, Locked, References } from "@/components/prose";
 import { BookmarkButton, CompleteLessonButton, FlashcardButton } from "@/components/interactive";
+import { LessonChecks } from "@/components/lesson-check";
 import { getAnatomy } from "@/content/anatomy";
-import { getLesson, lessons } from "@/content/curriculum";
+import { coursePlace, findLesson, getCourse, getLesson, lessons } from "@/content/curriculum";
 import { canAccess } from "@/lib/entitlements";
 import { currentSession } from "@/lib/session";
 
@@ -26,6 +27,8 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
   const lesson = getLesson(course, slug);
   if (!lesson) notFound();
   const session = await currentSession();
+  const courseRecord = getCourse(lesson.course);
+  const place = coursePlace(lesson);
   if (!canAccess(session?.entitlement ?? "free", lesson.access)) {
     return (
       <section className="section wrap">
@@ -35,8 +38,14 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
   }
   return (
     <article className="section wrap reading">
-      <p className="kicker">{lesson.level}</p>
+      <p className="kicker">Lesson {place.index + 1} of {place.total}</p>
       <h1>{lesson.title}</h1>
+      <p className="meta">
+        <span>{courseRecord?.title ?? "Academy"}</span>
+        <span>{lesson.level}</span>
+        <span>{lesson.minutes} min</span>
+        <span>{lesson.access === "free" ? "Free" : "Individual library"}</span>
+      </p>
       <EditorialNote editorial={lesson.editorial} />
       <p className="actions">
         <BookmarkButton href={`/academy/${lesson.course}/${lesson.slug}`} title={lesson.title} />
@@ -64,15 +73,31 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
         </section>
       ) : null}
       <h2>Misconceptions</h2>
-      <ul>{lesson.misconceptions.map((item) => <li key={item.myth}><strong>{item.myth}</strong> {item.correction}</li>)}</ul>
-      <h2>Checks</h2>
-      {lesson.checks.map((check) => (
-        <details key={check.question}>
-          <summary>{check.question}</summary>
-          <ol>{check.choices.map((choice) => <li key={choice}>{choice}</li>)}</ol>
-          <p>Key: {check.choices[check.answer]}. {check.explanation}</p>
-        </details>
-      ))}
+      <ul className="myths">
+        {lesson.misconceptions.map((item) => (
+          <li key={item.myth}>
+            <strong>{item.myth}</strong>
+            <span>{item.correction}</span>
+          </li>
+        ))}
+      </ul>
+      <h2>Check yourself</h2>
+      <LessonChecks checks={lesson.checks} />
+      {lesson.tools.length ? (
+        <>
+          <h2>Practice the arithmetic</h2>
+          <ul className="rows">
+            {lesson.tools.map((tool) => (
+              <li key={tool.href}>
+                <Link href={tool.href}>
+                  <span className="row-title">{tool.label}</span>
+                  <span className="row-meta">Calculator</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
       <h2>Related</h2>
       <ul className="rows">
         {lesson.anatomy.map((item) => {
@@ -87,21 +112,24 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
           );
         })}
         {lesson.related.map((item) => {
-          const related = getLesson(lesson.course, item);
+          const related = findLesson(item);
+          if (!related) return null;
           return (
             <li key={item}>
-              <Link href={`/academy/${lesson.course}/${item}`}>
-                <span className="row-title">{related?.title ?? item}</span>
-                <span className="row-meta">Lesson</span>
+              <Link href={`/academy/${related.course}/${related.slug}`}>
+                <span className="row-title">{related.title}</span>
+                <span className="row-meta">{getCourse(related.course)?.title ?? "Lesson"}</span>
               </Link>
             </li>
           );
         })}
       </ul>
       <References references={lesson.references} />
-      <p className="actions">
+      <nav className="actions" aria-label="Lesson order">
+        {place.previous ? <Link className="btn-quiet" href={`/academy/${place.previous.course}/${place.previous.slug}`}>Previous: {place.previous.title}</Link> : null}
         <CompleteLessonButton slug={`${lesson.course}/${lesson.slug}`} />
-      </p>
+        {place.next ? <Link className="btn" href={`/academy/${place.next.course}/${place.next.slug}`}>Next: {place.next.title}</Link> : null}
+      </nav>
     </article>
   );
 }

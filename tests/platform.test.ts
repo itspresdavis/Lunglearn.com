@@ -23,9 +23,9 @@ import {
   wintersFormula,
 } from "@/lib/calculators";
 import { resourceCounts } from "@/lib/catalog";
-import { anatomyRecords } from "@/content/anatomy";
+import { anatomyRecords, getAnatomy } from "@/content/anatomy";
 import { diseases } from "@/content/diseases";
-import { lessons } from "@/content/curriculum";
+import { findLesson, lessons } from "@/content/curriculum";
 import { medications } from "@/content/medications";
 import { questions } from "@/content/questions";
 import { canTransition, publishBlockers } from "@/lib/editorial";
@@ -131,6 +131,21 @@ describe("search and catalog", () => {
       { id: "b", type: "Lesson", title: "trachea", href: "/b", text: "other", access: "free" },
     ], "trachea airway");
     expect(hits.map((hit) => hit.id)).toEqual(["a"]);
+  });
+
+  it("points every lesson at a real neighbor, structure, and answer", () => {
+    const slugs = lessons.map((lesson) => lesson.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const lesson of lessons) {
+      for (const related of lesson.related) expect(findLesson(related)?.slug).toBe(related);
+      for (const id of lesson.anatomy) expect(getAnatomy(id)?.id).toBe(id);
+      for (const tool of lesson.tools) {
+        const slug = tool.href.slice("/calculators/".length);
+        expect(calculators.some((calculator) => calculator.slug === slug)).toBe(true);
+      }
+      for (const check of lesson.checks) expect(check.answer).toBeGreaterThanOrEqual(0);
+      for (const check of lesson.checks) expect(check.answer).toBeLessThan(check.choices.length);
+    }
   });
 
   it("counts only records that exist", () => {

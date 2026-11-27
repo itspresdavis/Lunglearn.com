@@ -49,6 +49,7 @@ export type Lesson = {
   checks: { question: string; choices: string[]; answer: number; explanation: string }[];
   related: string[];
   anatomy: string[];
+  tools: { href: string; label: string }[];
   references: Reference[];
   editorial: EditorialRecord;
 };
@@ -107,6 +108,7 @@ export const lessons: Lesson[] = [
     ],
     related: ["cardiopulmonary-terminology", "professional-ethics"],
     anatomy: ["text-lung"],
+    tools: [],
     references: [
       {
         title: "Respiratory Therapists",
@@ -162,6 +164,7 @@ export const lessons: Lesson[] = [
     ],
     related: ["what-respiratory-therapy-studies", "oxygen-content-and-delivery"],
     anatomy: ["text-alveolus"],
+    tools: [],
     references: [openstax],
     editorial: teaching,
   },
@@ -213,6 +216,7 @@ export const lessons: Lesson[] = [
     ],
     related: ["mechanics-of-breathing"],
     anatomy: ["fma-7394", "fma-7396", "fma-68418", "text-carina", "text-alveolus"],
+    tools: [],
     references: [lungs, openstax],
     editorial: teaching,
   },
@@ -261,6 +265,11 @@ export const lessons: Lesson[] = [
     ],
     related: ["airway-nose-to-alveolus", "introduction-to-invasive-ventilation"],
     anatomy: ["fma-13295", "fma-9756", "text-pleura"],
+    tools: [
+      { href: "/calculators/static-compliance", label: "Static compliance" },
+      { href: "/calculators/airway-resistance", label: "Airway resistance" },
+      { href: "/calculators/time-constant", label: "Time constant" },
+    ],
     references: [lungs, openstax],
     editorial: teaching,
   },
@@ -307,6 +316,10 @@ export const lessons: Lesson[] = [
     ],
     related: ["arterial-blood-gas-framework"],
     anatomy: ["text-alveolus"],
+    tools: [
+      { href: "/calculators/oxygen-content", label: "Arterial oxygen content" },
+      { href: "/calculators/oxygen-delivery", label: "Oxygen delivery" },
+    ],
     references: [openstax],
     editorial: teaching,
   },
@@ -353,6 +366,10 @@ export const lessons: Lesson[] = [
     ],
     related: ["oxygen-content-and-delivery", "introduction-to-invasive-ventilation"],
     anatomy: ["text-alveolus"],
+    tools: [
+      { href: "/calculators/acid-base", label: "Acid-base compensation check" },
+      { href: "/calculators/winters-formula", label: "Winter's formula" },
+    ],
     references: [openstax],
     editorial: teaching,
   },
@@ -399,6 +416,11 @@ export const lessons: Lesson[] = [
     ],
     related: ["mechanics-of-breathing", "arterial-blood-gas-framework"],
     anatomy: ["fma-7394", "text-lung", "text-alveolus"],
+    tools: [
+      { href: "/calculators/predicted-body-weight", label: "Predicted body weight" },
+      { href: "/calculators/static-compliance", label: "Static compliance" },
+      { href: "/calculators/airway-resistance", label: "Airway resistance" },
+    ],
     references: [ardsnet, lungs],
     editorial: teaching,
   },
@@ -436,6 +458,7 @@ export const lessons: Lesson[] = [
     ],
     related: ["what-respiratory-therapy-studies"],
     anatomy: [],
+    tools: [],
     references: [
       {
         title: "Respiratory Therapists",
@@ -459,4 +482,25 @@ export function lessonsIn(course: string) {
 
 export function getLesson(course: string, slug: string) {
   return lessons.find((lesson) => lesson.course === course && lesson.slug === slug);
+}
+
+export function findLesson(slug: string) {
+  return lessons.find((lesson) => lesson.slug === slug);
+}
+
+export function lessonByKey(key: string) {
+  const slash = key.indexOf("/");
+  if (slash <= 0) return undefined;
+  return getLesson(key.slice(0, slash), key.slice(slash + 1));
+}
+
+export function coursePlace(lesson: Lesson) {
+  const group = lessonsIn(lesson.course);
+  const index = group.findIndex((item) => item.slug === lesson.slug);
+  return {
+    index,
+    total: group.length,
+    previous: index > 0 ? group[index - 1] : undefined,
+    next: index >= 0 && index < group.length - 1 ? group[index + 1] : undefined,
+  };
 }

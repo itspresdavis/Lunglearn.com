@@ -15,11 +15,11 @@ export default function AcademyPage() {
           <h2>{course.title}</h2>
           <p>{course.summary}</p>
           <ul className="rows">
-            {lessonsIn(course.slug).map((lesson) => (
+            {lessonsIn(course.slug).map((lesson, index, list) => (
               <li key={lesson.slug}>
                 <Link href={`/academy/${course.slug}/${lesson.slug}`}>
                   <span className="row-title">{lesson.title}</span>
-                  <span className="row-meta">{lesson.level} · {lesson.minutes} min · {lesson.access}</span>
+                  <span className="row-meta">{index + 1} of {list.length} · {lesson.level} · {lesson.minutes} min · {lesson.access === "free" ? "free" : "individual library"}</span>
                 </Link>
               </li>
             ))}
