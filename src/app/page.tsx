@@ -22,6 +22,7 @@ export default function HomePage() {
     {
       title: "Practice",
       items: [
+        ["/shift", "On shift", "8"],
         ["/calculators", "Calculators", String(counts.calculators)],
         ["/board-prep", "Board prep", String(counts.questions)],
         ["/simulations", "Simulations", String(counts.simulations)],

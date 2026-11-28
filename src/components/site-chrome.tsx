@@ -17,6 +17,7 @@ const SECTIONS = [
   {
     label: "Practice",
     links: [
+      ["/shift", "On shift"],
       ["/calculators", "Calculators"],
       ["/board-prep", "Board prep"],
       ["/simulations", "Simulations"],

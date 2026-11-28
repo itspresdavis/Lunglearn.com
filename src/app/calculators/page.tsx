@@ -13,7 +13,7 @@ export default function CalculatorsPage() {
     <section className="section wrap">
       <p className="kicker">Tools</p>
       <h1>Calculators</h1>
-      <p className="lede">{calculators.length} educational calculators. Each one shows its formula and refuses to write an order.</p>
+      <p className="lede">{calculators.length} educational calculators. Each one shows its formula and refuses to write an order. The eight used on a shift are on <Link href="/shift">On shift</Link>.</p>
       <ul className="rows">
         {calculators.map((calculator) => (
           <li key={calculator.slug}>

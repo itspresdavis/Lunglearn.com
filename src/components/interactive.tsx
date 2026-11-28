@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { safeNext } from "@/lib/http";
@@ -147,7 +147,21 @@ export function ExamRunner({
   const [timed, setTimed] = useState(true);
   const [left, setLeft] = useState(minutes * 60);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const posted = useRef(false);
   const current = items[index];
+
+  useEffect(() => {
+    if (!done || posted.current) return;
+    posted.current = true;
+    void fetch("/api/study", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        action: "practice",
+        items: items.map((item) => ({ questionId: item.id, missed: picked[item.id] !== item.answer })),
+      }),
+    });
+  }, [done, items, picked]);
 
   useEffect(() => {
     if (!timed || done) return;

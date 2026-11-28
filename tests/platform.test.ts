@@ -37,6 +37,7 @@ import { reviewCard, startingCard } from "@/lib/srs";
 import { calculatorLessons, topicStudyLinks } from "@/lib/study-links";
 import { patchFromStripeEvent } from "@/lib/stripe-billing";
 import { simulations } from "@/content/simulation-cases";
+import { shiftSituations, shiftTools } from "@/content/shift";
 import { calculators } from "@/content/tools";
 import { decryptBytes, hotp, sniffUpload, redactSensitive } from "@/server/crypto";
 import { Store } from "@/server/store";
@@ -147,6 +148,31 @@ describe("search and catalog", () => {
       { id: "b", type: "Lesson", title: "trachea", href: "/b", text: "other", access: "free" },
     ], "trachea airway");
     expect(hits.map((hit) => hit.id)).toEqual(["a"]);
+  });
+
+  it("keeps the shift list inside real calculators and cases", () => {
+    expect(shiftTools).toHaveLength(8);
+    for (const tool of shiftTools) expect(calculators.some((calculator) => calculator.slug === tool.slug)).toBe(true);
+    for (const situation of shiftSituations) {
+      expect(simulations.some((simulation) => simulation.id === situation.simulation)).toBe(true);
+      for (const slug of situation.calculators) expect(calculators.some((calculator) => calculator.slug === slug)).toBe(true);
+    }
+  });
+
+  it("remembers the topic missed most often in the latest practice session", () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "ll-practice-"));
+    const store = new Store(directory);
+    const created = store.register({ email: "practice@example.edu", password: "long-password" });
+    if (!("user" in created) || !created.user) return;
+    store.recordPractice(created.user.id, [
+      { questionId: "q4", topic: "Mechanics", missed: true },
+    ], "2026-11-27T12:00:00.000Z");
+    store.recordPractice(created.user.id, [
+      { questionId: "q2", topic: "Airway", missed: true },
+      { questionId: "q5", topic: "Oxygenation", missed: true },
+      { questionId: "q-oxygen", topic: "Oxygenation", missed: true },
+    ], "2026-11-27T18:00:00.000Z");
+    expect(store.latestMiss(created.user.id)).toMatchObject({ topic: "Oxygenation" });
   });
 
   it("keeps disease links and calculator lessons inside real records", () => {

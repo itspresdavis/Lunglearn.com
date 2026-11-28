@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { lessonByKey } from "@/content/curriculum";
+import { questions } from "@/content/questions";
 import { sameOrigin } from "@/lib/http";
 import { reviewCard, type ReviewGrade } from "@/lib/srs";
 import { currentSession } from "@/lib/session";
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
     grade?: number;
     lessonSlug?: string;
     cards?: { front?: string; back?: string; sourceHref?: string | null }[];
+    items?: { questionId?: string; missed?: boolean }[];
   } | null;
   const store = getStore();
   const today = new Date().toISOString().slice(0, 10);
@@ -64,6 +66,17 @@ export async function POST(request: Request) {
     const next = reviewCard(card, body.grade as ReviewGrade, today);
     store.updateFlashcard(session.user.id, card.id, next);
     return NextResponse.json({ ok: true, card: next });
+  }
+  if (body?.action === "practice" && Array.isArray(body.items)) {
+    const items = body.items.flatMap((item) => {
+      if (!item || typeof item.questionId !== "string") return [];
+      const question = questions.find((entry) => entry.id === item.questionId);
+      if (!question) return [];
+      return [{ questionId: question.id, topic: question.topic, missed: item.missed === true }];
+    });
+    if (!items.length) return NextResponse.json({ error: "No practice items matched the library." }, { status: 400 });
+    store.recordPractice(session.user.id, items);
+    return NextResponse.json({ ok: true });
   }
   if (body?.action === "complete" && body.lessonSlug) {
     const lessonSlug = body.lessonSlug.slice(0, 120);

@@ -83,6 +83,7 @@ type Flashcard = {
   dueOn: string;
 };
 type Progress = { userId: string; lessonSlug: string; completedAt: string };
+type PracticeMark = { userId: string; at: string; questionId: string; topic: string; missed: boolean };
 type Classroom = { id: string; ownerId: string; name: string; code: string };
 type Enrollment = { classroomId: string; userId: string };
 type Assignment = { id: string; classroomId: string; title: string; href: string; dueOn: string | null };
@@ -101,6 +102,7 @@ type Database = {
   bookmarks: Bookmark[];
   flashcards: Flashcard[];
   progress: Progress[];
+  practice: PracticeMark[];
   classrooms: Classroom[];
   enrollments: Enrollment[];
   assignments: Assignment[];
@@ -123,6 +125,7 @@ function empty(): Database {
     bookmarks: [],
     flashcards: [],
     progress: [],
+    practice: [],
     classrooms: [],
     enrollments: [],
     assignments: [],
@@ -657,6 +660,35 @@ export class Store {
 
   progressFor(userId: string) {
     return this.read().progress.filter((row) => row.userId === userId);
+  }
+
+  recordPractice(userId: string, items: { questionId: string; topic: string; missed: boolean }[], at = new Date().toISOString()) {
+    const db = this.read();
+    for (const item of items.slice(0, 40)) {
+      const questionId = item.questionId.trim().slice(0, 40);
+      const topic = item.topic.trim().slice(0, 80);
+      if (!questionId || !topic) continue;
+      db.practice.push({ userId, at, questionId, topic, missed: item.missed === true });
+    }
+    const mine = db.practice.filter((mark) => mark.userId === userId);
+    const extras = mine.length - 80;
+    if (extras > 0) {
+      const drop = new Set(mine.slice(0, extras).map((mark) => mark));
+      db.practice = db.practice.filter((mark) => mark.userId !== userId || !drop.has(mark));
+    }
+    this.write(db);
+  }
+
+  latestMiss(userId: string) {
+    const missed = this.read().practice.filter((mark) => mark.userId === userId && mark.missed);
+    const latestAt = missed.map((mark) => mark.at).sort().at(-1);
+    if (!latestAt) return null;
+    const counts = new Map<string, number>();
+    for (const mark of missed.filter((item) => item.at === latestAt)) {
+      counts.set(mark.topic, (counts.get(mark.topic) ?? 0) + 1);
+    }
+    const topic = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0];
+    return topic ? { topic, at: latestAt } : null;
   }
 
   createClassroom(ownerId: string, name: string) {
