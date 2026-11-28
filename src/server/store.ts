@@ -792,7 +792,9 @@ function publicUser(user: User) {
 }
 
 export function getStore() {
-  const directory = process.env.DATA_DIR || path.join(process.cwd(), ".data");
+  const directory =
+    process.env.DATA_DIR ||
+    (process.env.VERCEL ? path.join("/tmp", "lung-learn") : path.join(process.cwd(), ".data"));
   return new Store(directory);
 }
 
