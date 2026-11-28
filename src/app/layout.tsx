@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Source_Serif_4 } from "next/font/google";
+import { PageMotion } from "@/components/page-motion";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import "./globals.css";
 
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <SiteHeader />
-        <main id="content">{children}</main>
+        <main id="content">
+          <PageMotion>{children}</PageMotion>
+        </main>
         <SiteFooter />
       </body>
     </html>

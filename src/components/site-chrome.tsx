@@ -38,7 +38,7 @@ const SECTIONS = [
 function Mark() {
   return (
     <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true">
-      <rect width="64" height="64" rx="10" fill="#1a56a0" />
+      <rect width="64" height="64" rx="20" fill="#1a56a0" />
       <path fill="#fff" d="M30 8h4v12h-4z" />
       <path fill="#fff" d="M30 18c-8 1-16 8-16 18 0 8 5 14 11 14 4 0 6-3 6-8V18z" />
       <path fill="#fff" d="M34 18c8 1 16 8 16 18 0 8-5 14-11 14-4 0-6-3-6-8V18z" />
@@ -134,7 +134,7 @@ export function SiteHeader() {
           </div>
         </nav>
       ) : null}
-      <nav className={open ? "mobile-menu open" : "mobile-menu"} aria-label="All sections" hidden={!open}>
+      <nav className={open ? "mobile-menu open" : "mobile-menu"} aria-label="All sections" inert={open ? undefined : true}>
         {SECTIONS.map((group) => (
           <div key={group.label}>
             <p className="nav-label">{group.label}</p>
