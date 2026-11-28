@@ -1,4 +1,4 @@
-export type CalcValue = { ok: true; value: number; unit: string; steps: string[] };
+export type CalcValue = { ok: true; value: number; unit: string; steps: string[]; reading: string | null };
 export type CalcError = { ok: false; error: string };
 export type CalcResult = CalcValue | CalcError;
 
@@ -6,8 +6,16 @@ function fail(error: string): CalcError {
   return { ok: false, error };
 }
 
-function ok(value: number, unit: string, steps: string[]): CalcValue {
-  return { ok: true, value: round(value), unit, steps };
+function ok(value: number, unit: string, steps: string[], reading: string | null = null): CalcValue {
+  return { ok: true, value: round(value), unit, steps, reading };
+}
+
+function berlinReading(ratio: number): string {
+  const limit = "The Berlin definition uses this ratio only together with timing, imaging, and the origin of the edema, and it expects PEEP or CPAP of at least 5 cm H2O. The ratio alone does not establish ARDS.";
+  if (ratio <= 100) return `This ratio is in the severe oxygenation band of the Berlin definition, 100 mm Hg or below. ${limit}`;
+  if (ratio <= 200) return `This ratio is in the moderate oxygenation band of the Berlin definition, above 100 through 200 mm Hg. ${limit}`;
+  if (ratio <= 300) return `This ratio is in the mild oxygenation band of the Berlin definition, above 200 through 300 mm Hg. ${limit}`;
+  return `This ratio is above the mild oxygenation band in the Berlin definition. ${limit}`;
 }
 
 export function round(value: number, places = 2): number {
@@ -28,10 +36,11 @@ export function predictedBodyWeight(sex: "male" | "female", heightCm: number): C
   }
   const base = sex === "male" ? 50 : 45.5;
   const value = base + 0.91 * (heightCm - 152.4);
+  const six = round(value * 6);
   return ok(value, "kg", [
     `PBW = ${base} + 0.91 × (${heightCm} − 152.4)`,
     "Constants are the adult ARDS Network predicted body weight equations.",
-  ]);
+  ], `Six mL per kilogram of this predicted weight is ${six} mL. The ARDS Network trial used 6 mL/kg predicted body weight in acute lung injury and ARDS. That volume is arithmetic from this equation, not an order for every person on a ventilator.`);
 }
 
 export function idealBodyWeightDevine(sex: "male" | "female", heightCm: number): CalcResult {
@@ -62,7 +71,8 @@ export function pfRatio(paO2: number, fiO2Fraction: number): CalcResult {
   if (!Number.isFinite(paO2) || !Number.isFinite(fiO2Fraction)) return fail("PaO2 and FiO2 must be numbers.");
   if (paO2 <= 0 || paO2 > 800) return fail("Enter a PaO2 from just above 0 through 800 mm Hg.");
   if (fiO2Fraction < 0.21 || fiO2Fraction > 1) return fail("Enter FiO2 as a fraction from 0.21 to 1.");
-  return ok(paO2 / fiO2Fraction, "mm Hg", [`P/F = ${paO2} ÷ ${fiO2Fraction}`]);
+  const value = paO2 / fiO2Fraction;
+  return ok(value, "mm Hg", [`P/F = ${paO2} ÷ ${fiO2Fraction}`], berlinReading(value));
 }
 
 export function alveolarPo2(input: {
@@ -116,11 +126,12 @@ export function oxygenContent(hemoglobin: number, saO2Fraction: number, paO2: nu
   if (paO2 < 0 || paO2 > 800) return fail("Enter a PaO2 from 0 through 800 mm Hg.");
   const bound = 1.34 * hemoglobin * saO2Fraction;
   const dissolved = 0.0031 * paO2;
-  return ok(bound + dissolved, "mL/dL", [
+  const content = bound + dissolved;
+  return ok(content, "mL/dL", [
     `Bound oxygen = 1.34 × ${hemoglobin} × ${saO2Fraction} = ${round(bound)}`,
     `Dissolved oxygen = 0.0031 × ${paO2} = ${round(dissolved)}`,
     "1.34 mL/g and 0.0031 mL/dL per mm Hg are conventional teaching constants, not universal physical constants.",
-  ]);
+  ], `Bound oxygen is ${round(bound)} of the ${round(content)} mL/dL. The worked example in the oxygen-content lesson, hemoglobin 15 g/dL fully saturated at a PaO2 of 100 mm Hg, is about 20.4 mL/dL. Use that example as a comparison, not as a goal for a person.`);
 }
 
 export function oxygenDelivery(caO2: number, cardiacOutput: number): CalcResult {
@@ -181,10 +192,12 @@ export function rapidShallowBreathingIndex(rate: number, tidalVolumeMl: number):
   if (rate <= 0 || rate > 80) return fail("Enter a respiratory rate from just above 0 through 80.");
   if (tidalVolumeMl <= 0 || tidalVolumeMl > 2000) return fail("Enter a tidal volume from just above 0 through 2,000 mL.");
   const liters = tidalVolumeMl / 1000;
-  return ok(rate / liters, "breaths/min/L", [
+  const value = rate / liters;
+  const place = value > 105 ? "above" : value < 105 ? "below" : "at";
+  return ok(value, "breaths/min/L", [
     `RSBI = ${rate} ÷ ${round(liters)} L`,
     "Yang and Tobin described this index. A single value does not decide whether a person should be extubated.",
-  ]);
+  ], `This index is ${place} 105, the landmark Yang and Tobin associated with weaning failure in their 1991 study. A single index is not an extubation decision.`);
 }
 
 export function anionGap(sodium: number, chloride: number, bicarbonate: number): CalcResult {

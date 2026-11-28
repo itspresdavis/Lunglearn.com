@@ -70,7 +70,7 @@ export function CalculatorForm({ spec }: { spec: CalculatorSpec }) {
         bicarbonate: numberFrom(values, "bicarbonate"),
       });
       if (!report.ok) setOutput(report);
-      else setOutput({ ok: true, value: numberFrom(values, "pH"), unit: "pH entered", steps: [report.summary, ...report.details, ...report.limits] });
+      else setOutput({ ok: true, value: numberFrom(values, "pH"), unit: "pH entered", steps: report.details, reading: [report.summary, ...report.limits].join(" ") });
       return;
     }
     const fn = table[spec.slug];
@@ -122,6 +122,7 @@ export function CalculatorForm({ spec }: { spec: CalculatorSpec }) {
               <li key={step}>{step}</li>
             ))}
           </ol>
+          {output.reading ? <p className="result-reading">{output.reading}</p> : null}
         </div>
       ) : null}
     </form>

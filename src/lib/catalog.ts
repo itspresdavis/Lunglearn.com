@@ -49,7 +49,7 @@ export function documents(): SearchDocument[] {
       type: "Disease",
       title: disease.title,
       href: `/diseases/${disease.slug}`,
-      text: `${disease.definition} ${disease.pathophysiology}`,
+      text: [disease.definition, disease.pathophysiology, disease.synonyms.join(" "), disease.categories.join(" ")].join(" "),
       access: "free",
     });
   }
@@ -59,7 +59,12 @@ export function documents(): SearchDocument[] {
       type: "Medication",
       title: medication.generic,
       href: `/pharmacology/${medication.slug}`,
-      text: `${medication.className} ${medication.mechanism}`,
+      text: [
+        medication.className,
+        medication.mechanism,
+        medication.brands.length ? `Brand names: ${medication.brands.join(", ")}.` : "",
+        medication.indications,
+      ].join(" "),
       access: "free",
     });
   }

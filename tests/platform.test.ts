@@ -22,11 +22,11 @@ import {
   staticCompliance,
   wintersFormula,
 } from "@/lib/calculators";
-import { resourceCounts } from "@/lib/catalog";
+import { queryCatalog, resourceCounts } from "@/lib/catalog";
 import { anatomyRecords, getAnatomy } from "@/content/anatomy";
 import { diseases } from "@/content/diseases";
 import { findLesson, getLesson, lessons } from "@/content/curriculum";
-import { medications } from "@/content/medications";
+import { getMedication, medications } from "@/content/medications";
 import { questions } from "@/content/questions";
 import { canTransition, publishBlockers } from "@/lib/editorial";
 import { canAccess, resolveEntitlement } from "@/lib/entitlements";
@@ -34,7 +34,7 @@ import { estimatedCardProcessingFeeCents, monthlyRecurringRevenueCents, operatin
 import { searchDocuments } from "@/lib/search";
 import { applySimulationAction, startSimulation } from "@/lib/simulation";
 import { reviewCard, startingCard } from "@/lib/srs";
-import { topicStudyLinks } from "@/lib/study-links";
+import { calculatorLessons, topicStudyLinks } from "@/lib/study-links";
 import { patchFromStripeEvent } from "@/lib/stripe-billing";
 import { simulations } from "@/content/simulation-cases";
 import { calculators } from "@/content/tools";
@@ -57,6 +57,21 @@ describe("formulas", () => {
     expect(cylinderDuration(2000, 2, "E")).toMatchObject({ ok: true, value: 280 });
     expect(deadSpaceFraction(40, 20)).toMatchObject({ ok: true, value: 0.5 });
     expect(idealBodyWeightDevine("male", 140).ok).toBe(true);
+  });
+
+  it("reads a result against a published landmark without making it an order", () => {
+    const severe = pfRatio(80, 0.8);
+    const mild = pfRatio(250, 1);
+    const above = pfRatio(100, 0.21);
+    const index = rapidShallowBreathingIndex(30, 300);
+    const weight = predictedBodyWeight("male", 180);
+    expect(severe.ok && severe.reading).toContain("severe");
+    expect(severe.ok && severe.reading).toContain("does not establish ARDS");
+    expect(mild.ok && mild.reading).toContain("mild");
+    expect(above.ok && above.reading).toContain("above the mild");
+    expect(index.ok && index.reading).toContain("below 105");
+    expect(index.ok && index.reading).toContain("not an extubation decision");
+    expect(weight.ok && weight.reading).toContain("not an order");
   });
 
   it("rejects unsafe or empty inputs", () => {
@@ -134,6 +149,15 @@ describe("search and catalog", () => {
     expect(hits.map((hit) => hit.id)).toEqual(["a"]);
   });
 
+  it("keeps disease links and calculator lessons inside real records", () => {
+    for (const disease of diseases) {
+      for (const id of disease.anatomy) expect(getAnatomy(id)?.id).toBe(id);
+      for (const slug of disease.medications) expect(getMedication(slug)?.slug).toBe(slug);
+      for (const slug of disease.lessons) expect(findLesson(slug)?.slug).toBe(slug);
+    }
+    for (const link of Object.values(calculatorLessons)) expect(getLesson(link.course, link.slug)?.slug).toBe(link.slug);
+  });
+
   it("points every lesson at a real neighbor, structure, and answer", () => {
     const slugs = lessons.map((lesson) => lesson.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
@@ -147,6 +171,13 @@ describe("search and catalog", () => {
       for (const check of lesson.checks) expect(check.answer).toBeGreaterThanOrEqual(0);
       for (const check of lesson.checks) expect(check.answer).toBeLessThan(check.choices.length);
     }
+  });
+
+  it("finds a brand name and keeps a sentence from the record", () => {
+    const hits = queryCatalog("Ventolin");
+    expect(hits.some((hit) => hit.title === "Albuterol")).toBe(true);
+    const albuterol = hits.find((hit) => hit.title === "Albuterol");
+    expect(albuterol?.excerpt.length).toBeGreaterThan(20);
   });
 
   it("counts only records that exist", () => {

@@ -312,6 +312,18 @@ a:hover { color: var(--accent); }
 .row-meta { color: var(--muted); font-size: 0.92rem; text-align: right; }
 .rows.notes a { display: block; }
 .rows.notes .row-meta { display: block; margin-top: 0.15rem; text-align: left; max-width: 40rem; }
+.row-excerpt { display: block; margin-top: 0.25rem; color: var(--muted); font-weight: 400; max-width: 42rem; }
+.on-page { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; margin: 0.2rem 0 1rem; font-family: var(--sans); font-size: 0.92rem; }
+.on-page a { text-decoration: none; }
+.result-reading {
+  margin: 0.85rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  font-family: var(--sans);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
 
 .kicker { margin: 0 0 0.35rem; color: var(--muted); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
 h1, h2, h3 { font-weight: 600; letter-spacing: -0.025em; line-height: 1.2; margin: 0.15rem 0 0.5rem; }

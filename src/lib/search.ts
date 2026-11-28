@@ -7,9 +7,25 @@ export type SearchDocument = {
   access: "free" | "premium";
 };
 
-export type SearchHit = SearchDocument & { score: number };
+export type SearchHit = SearchDocument & { score: number; excerpt: string };
 
-export function searchDocuments(documents: SearchDocument[], query: string, limit = 20): SearchHit[] {
+function excerpt(text: string, terms: string[]): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  const lower = clean.toLowerCase();
+  let at = -1;
+  for (const term of terms) {
+    const found = lower.indexOf(term);
+    if (found >= 0 && (at < 0 || found < at)) at = found;
+  }
+  if (at < 0) return clean.slice(0, 160);
+  const start = Math.max(0, at - 70);
+  const end = Math.min(clean.length, at + 110);
+  const slice = clean.slice(start, end).trim();
+  return `${start > 0 ? "…" : ""}${slice}${end < clean.length ? "…" : ""}`;
+}
+
+export function searchDocuments(documents: SearchDocument[], query: string, limit = 24): SearchHit[] {
   const terms = query
     .toLowerCase()
     .split(/[^a-z0-9+]+/)
@@ -30,7 +46,7 @@ export function searchDocuments(documents: SearchDocument[], query: string, limi
         matched += 1;
       }
     }
-    if (matched === terms.length) hits.push({ ...document, score });
+    if (matched === terms.length) hits.push({ ...document, score, excerpt: excerpt(document.text, terms) });
   }
   hits.sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
   return hits.slice(0, limit);
