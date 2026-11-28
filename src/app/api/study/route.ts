@@ -32,6 +32,7 @@ export async function POST(request: Request) {
     cardId?: string;
     grade?: number;
     lessonSlug?: string;
+    cards?: { front?: string; back?: string; sourceHref?: string | null }[];
   } | null;
   const store = getStore();
   const today = new Date().toISOString().slice(0, 10);
@@ -44,14 +45,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
   if (body?.action === "card" && body.front && body.back) {
-    store.addFlashcard({
-      userId: session.user.id,
-      front: body.front.slice(0, 500),
-      back: body.back.slice(0, 2000),
-      sourceHref: body.sourceHref?.startsWith("/") ? body.sourceHref : null,
-      today,
-    });
-    return NextResponse.json({ ok: true });
+    const result = store.addFlashcards(session.user.id, [{ front: body.front, back: body.back, sourceHref: body.sourceHref ?? null }], today);
+    return NextResponse.json({ ok: true, ...result });
+  }
+  if (body?.action === "cards" && Array.isArray(body.cards)) {
+    const cards = body.cards.flatMap((card) =>
+      card && typeof card.front === "string" && typeof card.back === "string"
+        ? [{ front: card.front, back: card.back, sourceHref: typeof card.sourceHref === "string" ? card.sourceHref : null }]
+        : [],
+    );
+    if (!cards.length) return NextResponse.json({ error: "Add at least one card." }, { status: 400 });
+    const result = store.addFlashcards(session.user.id, cards, today);
+    return NextResponse.json({ ok: true, ...result });
   }
   if (body?.action === "review" && body.cardId && typeof body.grade === "number" && body.grade >= 0 && body.grade <= 5) {
     const card = store.flashcardsFor(session.user.id).find((item) => item.id === body.cardId);

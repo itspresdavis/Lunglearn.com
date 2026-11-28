@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Blocks, EditorialNote, Locked, References } from "@/components/prose";
-import { BookmarkButton, CompleteLessonButton, FlashcardButton } from "@/components/interactive";
+import { AddTermsButton, BookmarkButton, CompleteLessonButton } from "@/components/interactive";
 import { LessonChecks } from "@/components/lesson-check";
 import { getAnatomy } from "@/content/anatomy";
 import { coursePlace, findLesson, getCourse, getLesson, lessons } from "@/content/curriculum";
@@ -54,13 +54,17 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
       <ul>{lesson.objectives.map((item) => <li key={item}>{item}</li>)}</ul>
       <Blocks blocks={lesson.blocks} />
       <h2>Terms</h2>
+      <p className="actions">
+        <AddTermsButton
+          sourceHref={`/academy/${lesson.course}/${lesson.slug}`}
+          terms={lesson.terms.map((term) => ({ front: term.term, back: term.definition }))}
+        />
+      </p>
       <dl>
         {lesson.terms.map((term) => (
           <div key={term.term}>
             <dt>{term.term}</dt>
-            <dd>
-              {term.definition} <FlashcardButton front={term.term} back={term.definition} sourceHref={`/academy/${lesson.course}/${lesson.slug}`} />
-            </dd>
+            <dd>{term.definition}</dd>
           </div>
         ))}
       </dl>

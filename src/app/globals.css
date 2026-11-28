@@ -264,6 +264,9 @@ h2 { font-size: 1.2rem; }
 h3 { font-size: 1.02rem; }
 .lede { font-size: 1.05rem; max-width: 42rem; color: var(--muted); margin-top: 0; }
 .grid { display: grid; gap: 0.9rem; }
+.span-2 { grid-column: 1 / -1; }
+.review-card { margin-top: 0.4rem; }
+.review-back { font-family: var(--serif); font-size: 1.15rem; margin: 0.7rem 0; }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
 .card, .banner, .panel, .plan {

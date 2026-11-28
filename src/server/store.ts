@@ -599,22 +599,39 @@ export class Store {
     return this.read().bookmarks.filter((bookmark) => bookmark.userId === userId);
   }
 
-  addFlashcard(input: { userId: string; front: string; back: string; sourceHref: string | null; today: string }) {
+  addFlashcards(userId: string, inputs: { front: string; back: string; sourceHref: string | null }[], today: string) {
     const db = this.read();
-    const card: Flashcard = {
-      id: this.id(),
-      userId: input.userId,
-      front: input.front.slice(0, 500),
-      back: input.back.slice(0, 2000),
-      sourceHref: input.sourceHref,
-      ease: 2.5,
-      intervalDays: 0,
-      repetitions: 0,
-      dueOn: input.today,
-    };
-    db.flashcards.push(card);
-    this.write(db);
-    return card;
+    let added = 0;
+    let skipped = 0;
+    for (const input of inputs.slice(0, 40)) {
+      const front = input.front.trim().slice(0, 500);
+      const back = input.back.trim().slice(0, 2000);
+      if (!front || !back) {
+        skipped += 1;
+        continue;
+      }
+      const sourceHref = input.sourceHref?.startsWith("/") ? input.sourceHref.slice(0, 300) : null;
+      const duplicate = db.flashcards.some((card) => card.userId === userId && card.front === front && card.sourceHref === sourceHref);
+      if (duplicate) {
+        skipped += 1;
+        continue;
+      }
+      const card: Flashcard = {
+        id: this.id(),
+        userId,
+        front,
+        back,
+        sourceHref,
+        ease: 2.5,
+        intervalDays: 0,
+        repetitions: 0,
+        dueOn: today,
+      };
+      db.flashcards.push(card);
+      added += 1;
+    }
+    if (added) this.write(db);
+    return { added, skipped };
   }
 
   flashcardsFor(userId: string) {

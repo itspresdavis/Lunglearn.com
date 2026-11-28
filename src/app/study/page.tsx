@@ -9,7 +9,7 @@ export default function StudyPage() {
     <section className="section wrap">
       <p className="kicker">Study</p>
       <h1>Study tools</h1>
-      <p>Flashcards use a spaced-repetition schedule stored on your account. Notes, bookmarks, and a browser-only daily goal live here. Print this page from the browser when you want a paper copy of what is loaded.</p>
+      <p>A review shows the front of a card first. The answer stays hidden until you ask for it, and then you choose when to see the card again. Notes, bookmarks, and a browser-only daily goal live here.</p>
       <p>
         <Link href="/study/tutor">Grounded tutor</Link> · <Link href="/atlas">Anatomy identification</Link> · <Link href="/board-prep">Custom practice</Link>
       </p>

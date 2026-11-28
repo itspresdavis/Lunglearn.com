@@ -23,10 +23,11 @@ export function reviewCard(card: SrsCard, grade: ReviewGrade, today: string): Sr
   if (grade < 3) {
     return { ease, intervalDays: 1, repetitions: 0, dueOn: addDays(today, 1) };
   }
+  // Easy lengthens the first two intervals so that grade changes the next date. Good keeps the 1-day, then 6-day steps.
   const repetitions = card.repetitions + 1;
   let intervalDays = 1;
-  if (repetitions === 1) intervalDays = 1;
-  else if (repetitions === 2) intervalDays = 6;
-  else intervalDays = Math.round(card.intervalDays * ease);
+  if (repetitions === 1) intervalDays = grade >= 5 ? 4 : 1;
+  else if (repetitions === 2) intervalDays = grade >= 5 ? 7 : 6;
+  else intervalDays = Math.round(card.intervalDays * ease * (grade >= 5 ? 1.3 : 1));
   return { ease, intervalDays, repetitions, dueOn: addDays(today, intervalDays) };
 }

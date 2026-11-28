@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { safeNext } from "@/lib/http";
 import { interpretAcidBase } from "@/lib/acid-base";
 import * as formulas from "@/lib/calculators";
 import type { CalcResult } from "@/lib/calculators";
 import type { Question } from "@/content/questions";
+import { topicStudyLinks } from "@/lib/study-links";
 import type { SimulationCase } from "@/content/simulation-cases";
 import { applySimulationAction, startSimulation, type SimSnapshot } from "@/lib/simulation";
 import type { CalculatorSpec } from "@/content/tools";
@@ -183,18 +185,35 @@ export function ExamRunner({
             {score} / {items.length}
           </p>
           <p>This is a count of matches to the answer key. It is not an examination score and it does not predict a credential.</p>
-          {items.map((item) => {
+          {topicTally(items, picked).map((row) => {
+            const link = topicStudyLinks[row.topic];
+            return (
+              <p key={row.topic}>
+                {row.topic}: {row.matched} of {row.total} matched the key.
+                {row.missed && link ? (
+                  <>
+                    {" "}
+                    <Link href={`/academy/${link.course}/${link.slug}`}>Review {link.label}</Link>.
+                  </>
+                ) : null}
+              </p>
+            );
+          })}
+          {[...items]
+            .sort((left, right) => Number(picked[left.id] === left.answer) - Number(picked[right.id] === right.answer))
+            .map((item) => {
             const choice = picked[item.id];
             const correct = choice === item.answer;
             return (
               <article key={item.id}>
                 <h3>{item.stem}</h3>
-                <p>{correct ? "Matched the key." : "Did not match the key."}</p>
+                <p>{correct ? "Matched the key." : choice === undefined ? "Not answered." : "Did not match the key."}</p>
                 <p>{item.explanation}</p>
                 {!correct && choice !== undefined ? <p>{item.whyWrong[choice] ?? "Review the explanation."}</p> : null}
                 <p className="muted">
                   {item.topic} · {item.difficulty}
                   {confidence[item.id] ? ` · confidence ${confidence[item.id]}` : ""}
+                  {bookmarks.includes(item.id) ? " · bookmarked" : ""}
                 </p>
               </article>
             );
@@ -243,7 +262,7 @@ export function ExamRunner({
               Finish
             </button>
           </div>
-          {bookmarks.length ? <p className="muted">Bookmarked: {bookmarks.join(", ")}</p> : null}
+          {bookmarks.length ? <p className="muted">{bookmarks.length} bookmarked for the end of this form.</p> : null}
         </div>
       )}
     </section>
@@ -301,8 +320,26 @@ async function postJson(url: string, body: unknown) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(body),
   });
-  const data = (await response.json().catch(() => ({}))) as { error?: string; ok?: boolean; mfaRequired?: boolean; challenge?: string };
-  return { ok: response.ok, error: data.error, mfaRequired: data.mfaRequired, challenge: data.challenge };
+  const data = (await response.json().catch(() => ({}))) as {
+    error?: string;
+    ok?: boolean;
+    mfaRequired?: boolean;
+    challenge?: string;
+    added?: number;
+    skipped?: number;
+  };
+  return { ok: response.ok, error: data.error, mfaRequired: data.mfaRequired, challenge: data.challenge, added: data.added, skipped: data.skipped };
+}
+
+function topicTally(items: Question[], picked: Record<string, number>) {
+  const rows = new Map<string, { matched: number; total: number }>();
+  for (const item of items) {
+    const row = rows.get(item.topic) ?? { matched: 0, total: 0 };
+    row.total += 1;
+    if (picked[item.id] === item.answer) row.matched += 1;
+    rows.set(item.topic, row);
+  }
+  return [...rows.entries()].map(([topic, row]) => ({ topic, ...row, missed: row.matched < row.total }));
 }
 
 export function AuthForm({ mode, next }: { mode: "sign-in" | "sign-up"; next?: string }) {
@@ -426,10 +463,39 @@ export function FlashcardButton({ front, back, sourceHref }: { front: string; ba
       className="btn-quiet no-print"
       onClick={async () => {
         const result = await postJson("/api/study", { action: "card", front, back, sourceHref });
-        setNote(result.ok ? "Card added." : result.error || "Sign in to make a card.");
+        if (!result.ok) {
+          setNote(result.error || "Sign in to make a card.");
+          return;
+        }
+        setNote(result.added ? "Card added." : "Already on your study desk.");
       }}
     >
       {note || "Make a flashcard"}
+    </button>
+  );
+}
+
+export function AddTermsButton({ terms, sourceHref }: { terms: { front: string; back: string }[]; sourceHref: string }) {
+  const [note, setNote] = useState("");
+  return (
+    <button
+      type="button"
+      className="btn-quiet no-print"
+      onClick={async () => {
+        const result = await postJson("/api/study", {
+          action: "cards",
+          cards: terms.map((term) => ({ ...term, sourceHref })),
+        });
+        if (!result.ok) {
+          setNote(result.error || "Sign in to add these cards.");
+          return;
+        }
+        const added = result.added ?? 0;
+        const skipped = result.skipped ?? 0;
+        setNote(added ? `Added ${added} to your study desk.${skipped ? ` ${skipped} were already there.` : ""}` : "These terms are already on your study desk.");
+      }}
+    >
+      {note || "Add these terms to my cards"}
     </button>
   );
 }

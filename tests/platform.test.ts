@@ -25,7 +25,7 @@ import {
 import { resourceCounts } from "@/lib/catalog";
 import { anatomyRecords, getAnatomy } from "@/content/anatomy";
 import { diseases } from "@/content/diseases";
-import { findLesson, lessons } from "@/content/curriculum";
+import { findLesson, getLesson, lessons } from "@/content/curriculum";
 import { medications } from "@/content/medications";
 import { questions } from "@/content/questions";
 import { canTransition, publishBlockers } from "@/lib/editorial";
@@ -34,6 +34,7 @@ import { estimatedCardProcessingFeeCents, monthlyRecurringRevenueCents, operatin
 import { searchDocuments } from "@/lib/search";
 import { applySimulationAction, startSimulation } from "@/lib/simulation";
 import { reviewCard, startingCard } from "@/lib/srs";
+import { topicStudyLinks } from "@/lib/study-links";
 import { patchFromStripeEvent } from "@/lib/stripe-billing";
 import { simulations } from "@/content/simulation-cases";
 import { calculators } from "@/content/tools";
@@ -203,6 +204,31 @@ describe("simulation and study", () => {
     const again = reviewCard(startingCard("2026-11-23"), 0, "2026-11-23");
     expect(again.repetitions).toBe(0);
     expect(again.ease).toBeGreaterThanOrEqual(1.3);
+    expect(again.dueOn).toBe("2026-11-24");
+    const good = reviewCard(startingCard("2026-11-27"), 3, "2026-11-27");
+    const easy = reviewCard(startingCard("2026-11-27"), 5, "2026-11-27");
+    expect(good.dueOn).toBe("2026-11-28");
+    expect(easy.dueOn).toBe("2026-12-01");
+  });
+
+  it("sends a missed topic to a real lesson and does not store the same card twice", () => {
+    for (const link of Object.values(topicStudyLinks)) {
+      expect(getLesson(link.course, link.slug)?.title).toBe(link.label);
+    }
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "ll-cards-"));
+    const store = new Store(directory);
+    const created = store.register({ email: "cards@example.edu", password: "long-password" });
+    if (!("user" in created) || !created.user) return;
+    const first = store.addFlashcards(created.user.id, [
+      { front: "Hypoxemia", back: "Low oxygen in the blood.", sourceHref: "/academy/foundations/cardiopulmonary-terminology" },
+      { front: "Hypoxemia", back: "Low oxygen in the blood.", sourceHref: "/academy/foundations/cardiopulmonary-terminology" },
+    ], "2026-11-27");
+    expect(first).toEqual({ added: 1, skipped: 1 });
+    const second = store.addFlashcards(created.user.id, [
+      { front: "Hypoxemia", back: "A different wording.", sourceHref: "/academy/foundations/cardiopulmonary-terminology" },
+    ], "2026-11-27");
+    expect(second).toEqual({ added: 0, skipped: 1 });
+    expect(store.flashcardsFor(created.user.id)).toHaveLength(1);
   });
 });
 
